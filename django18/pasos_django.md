@@ -15,6 +15,11 @@
     # Windows
     source .venv/Scripts/activate
     . .venv/Scripts/activate
+# powersell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+ "ejecute este comando ya que me daba un error de UnauthorizedAccess"
+Luego ejecute el comando:
+ .\.venv\Scripts\Activate.ps1 
 
     # Linux/Mac
     source .venv/bin/activate
