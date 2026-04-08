@@ -28,7 +28,7 @@ Luego ejecute el comando:
 
 11. instalar django con el manejador de paquetes de python `pip` con el comando `pip install Django`
 12. crear el requirements.txt con los datos de las dependencias usando el comando `pip freeze > requirements.txt` (`**`)
-13. crear el proyecto django donde estamos trabajando con el comando `django-admin startproject <nombre_del_proyecto> .` (`***`)
+13. crear el proyecto django donde estamos trabajando con el comando `django-admin startproject mi_proyecto .` (`***`)
 14. probamos el proyecto ejecutando primero `python manage.py migrate` y luego `python manage.py runserver`
 15. creamos nuestra app principal con el comando `python manage.py startapp <nombre_de_la_app>`
     - agregamos la app a el archivo settings.py
