@@ -17,9 +17,13 @@
     . .venv/Scripts/activate
 # powersell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Set-ExecutionPolicity Unrestricted 
  "ejecute este comando ya que me daba un error de UnauthorizedAccess"
+
 Luego ejecute el comando:
- .\.venv\Scripts\Activate.ps1 
+ .\.venv\Scripts\Activate.ps1 (.\.venv\Scripts\activate)
+ Para desactivar:
+ deactivate
 
     # Linux/Mac
     source .venv/bin/activate
@@ -35,9 +39,11 @@ Luego ejecute el comando:
     - creamos el archivo urls.py dentro de nuestra app
     - agregamos el path que conecta al urls.py de la carpeta donde esta el settings.py al de nuestra app con el codigo `path('<url_que_quieran_poner>', include('<nombre_de_la_app>.urls'))`
 16. agregamos el valor `BASE_DIR / 'templates'` a la lista en la key `DIRS` de la variable `TEMPLATES` en el archivo settings.py
-17. creamos la carpeta templates a la altura de las apps
+Agregué BASE_DIR / 'templates' a DIRS en settings.py
+17. creamos la carpeta templates a la altura de las apps (Creé la carpeta templates en la raíz del proyecto)
 18. crear un super usuario que nos permita acceder al apartado de admin de nuestra pagina ejecutando `python manage.py createsuperuser`
     - tener en cuenta que cuando se solicita la password cuando escriben no se muestra en la terminal pero se esta escribiendo igual (esto es para que no se vea la password que estan configurando a modo de seguridad)
+    - Acceder al panel de administración de Django (http://127.0.0.1:8000/admin)
 19. crear vistas
     - crear el path que conectara con su vista en el archivo `urls.py` de la app que corresponda
     - crear la vista en el archivo `views.py` de la app que corresponda
