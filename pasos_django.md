@@ -57,7 +57,7 @@ Agregué BASE_DIR / 'templates' a DIRS en settings.py
     3. plasmar la migracion en la bd con el comando `python manage.py migrate`
     4. En caso de modificacion de un modelo existente, creacion de otro modelo o borrado de un modelo volver a ejecutar los pasos 2 y 3
         - tener en cuenta que para modificar el nombre y los atributos de un mismo modelo se deben hacer los pasos 2 y 3 una vez por la modificacion de los atributos y otro por el cambio en el nombre del modelo para no generar conflictos con django
-    5. registrar el modelo en el apartado de admin importando en el archivo `admin.py` el modelo y agregando el codigo `admin.site.register(<modelo_importado>)`
+    5. registrar el modelo en el apartado de admin importando en el archivo `admin.py` el modelo y agregando el codigo `admin.site.register(<modelo_importado>)` dentro del mismo archivo admin.py
         - en caso de ser varios modelos se puede agregar esta ultima linea para cada modelo o hacer una sola linea y pasarle todos los modelos dentro de una lista
     6. importar el modelo creado en el views.py que corresponda para utilizarlo en las vistas
 21. crear formularios
