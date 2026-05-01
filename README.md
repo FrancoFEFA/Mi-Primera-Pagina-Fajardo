@@ -6,15 +6,16 @@ Sistema web desarrollado con **Django** para la gestión completa de un gimnasio
 
 ## 📋 Tabla de Contenidos
 
-- [Descripción](#descripción)
-- [Características](#características)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Ejecución](#ejecución)
-- [Guía de Pruebas](#guía-de-pruebas)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Documentación de Funcionalidades](#documentación-de-funcionalidades)
-- [Panel de Administración](#panel-de-administración)
+
+- [Descripción](#-descripción)
+- [Características](#-características)
+- [Requisitos](#-requisitos)
+- [Instalación](#-instalación)
+- [Ejecución](#-ejecución)
+- [Guía de Pruebas](#-guía-de-pruebas)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Documentación de Funcionalidades](#-documentación-de-funcionalidades)
+- [Panel de Administración](#-panel-de-administración)
 
 ---
 
