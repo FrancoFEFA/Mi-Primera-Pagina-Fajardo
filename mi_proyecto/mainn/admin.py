@@ -1,5 +1,5 @@
 from django.contrib import admin
+from .models import Socio, Entrenador, Rutina, Asistencia
 
-# Register your models here.
-from .models import Persona
-admin.site.register(Persona)
+# Registrar todos los modelos en el panel de administración
+admin.site.register([Socio, Entrenador, Rutina, Asistencia])

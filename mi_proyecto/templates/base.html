@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PowerFit - Sistema de gestión integral para gimnasios">
+    <title>{% block titulo %}PowerFit{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pf-primary: #6c3ce0;
+            --pf-primary-light: #8b5cf6;
+            --pf-primary-dark: #5521c9;
+            --pf-accent: #14b8a6;
+            --pf-accent-light: #2dd4bf;
+            --pf-bg-dark: #0f0f1a;
+            --pf-bg-card: #1a1a2e;
+            --pf-bg-card-hover: #22223a;
+            --pf-text: #e2e8f0;
+            --pf-text-muted: #94a3b8;
+            --pf-border: #2d2d44;
+            --pf-success: #22c55e;
+            --pf-warning: #f59e0b;
+            --pf-danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--pf-bg-dark);
+            color: var(--pf-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(15, 15, 26, 0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--pf-border);
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--pf-primary-light) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.03);
+        }
+
+        .navbar-brand .brand-icon {
+            background: linear-gradient(135deg, var(--pf-primary), var(--pf-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--pf-text-muted) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff !important;
+            background: rgba(108, 60, 224, 0.15);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pf-primary), var(--pf-accent));
+            border-radius: 2px;
+        }
+
+        .nav-link i {
+            margin-right: 0.3rem;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--pf-border);
+        }
+
+        .page-header h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fff, var(--pf-text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: var(--pf-text-muted);
+            margin-bottom: 0;
+        }
+
+        /* ===== CARDS ===== */
+        .card-custom {
+            background: var(--pf-bg-card);
+            border: 1px solid var(--pf-border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card-custom:hover {
+            border-color: var(--pf-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(108, 60, 224, 0.15);
+        }
+
+        .card-custom .card-body {
+            padding: 1.5rem;
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            background: var(--pf-bg-card);
+            border: 1px solid var(--pf-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .stat-card.purple::before { background: linear-gradient(90deg, var(--pf-primary), var(--pf-primary-light)); }
+        .stat-card.teal::before { background: linear-gradient(90deg, var(--pf-accent), var(--pf-accent-light)); }
+        .stat-card.amber::before { background: linear-gradient(90deg, var(--pf-warning), #fbbf24); }
+        .stat-card.green::before { background: linear-gradient(90deg, var(--pf-success), #4ade80); }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .stat-icon.purple { background: rgba(108, 60, 224, 0.15); color: var(--pf-primary-light); }
+        .stat-icon.teal { background: rgba(20, 184, 166, 0.15); color: var(--pf-accent-light); }
+        .stat-icon.amber { background: rgba(245, 158, 11, 0.15); color: var(--pf-warning); }
+        .stat-icon.green { background: rgba(34, 197, 94, 0.15); color: var(--pf-success); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--pf-text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== TABLES ===== */
+        .table-custom {
+            color: var(--pf-text);
+        }
+
+        .table-custom thead th {
+            background: rgba(108, 60, 224, 0.1);
+            color: var(--pf-primary-light);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--pf-border);
+            padding: 1rem;
+        }
+
+        .table-custom tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--pf-border);
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background: var(--pf-bg-card-hover);
+        }
+
+        /* ===== BADGES ===== */
+        .badge-membresia {
+            padding: 0.35em 0.8em;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-basica { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+        .badge-premium { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .badge-vip { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+
+        .badge-turno {
+            padding: 0.35em 0.8em;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-mañana { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+        .badge-tarde { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+        .badge-noche { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+
+        /* ===== FORMS ===== */
+        .form-control,
+        .form-select {
+            background: var(--pf-bg-dark);
+            border: 1px solid var(--pf-border);
+            color: var(--pf-text);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            transition: all 0.25s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: var(--pf-bg-dark);
+            border-color: var(--pf-primary);
+            color: var(--pf-text);
+            box-shadow: 0 0 0 3px rgba(108, 60, 224, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: var(--pf-text-muted);
+            opacity: 0.6;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--pf-text);
+            margin-bottom: 0.4rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--pf-primary), var(--pf-primary-light));
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 60, 224, 0.35);
+            color: #fff;
+        }
+
+        .btn-outline-custom {
+            border: 1px solid var(--pf-border);
+            color: var(--pf-text);
+            font-weight: 500;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-custom:hover {
+            border-color: var(--pf-primary);
+            color: var(--pf-primary-light);
+            background: rgba(108, 60, 224, 0.08);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--pf-accent), var(--pf-accent-light));
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(20, 184, 166, 0.35);
+            color: #fff;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--pf-text-muted);
+            z-index: 10;
+        }
+
+        .search-bar .form-control {
+            padding-left: 2.8rem;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--pf-text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .empty-state h5 {
+            font-weight: 600;
+            color: var(--pf-text);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--pf-bg-card);
+            border-top: 1px solid var(--pf-border);
+            padding: 1.5rem 0;
+            color: var(--pf-text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .animate-in:nth-child(1) { animation-delay: 0.05s; }
+        .animate-in:nth-child(2) { animation-delay: 0.1s; }
+        .animate-in:nth-child(3) { animation-delay: 0.15s; }
+        .animate-in:nth-child(4) { animation-delay: 0.2s; }
+
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(108, 60, 224, 0.15), rgba(20, 184, 166, 0.1));
+            border: 1px solid var(--pf-border);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(108, 60, 224, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-section h1 {
+            font-weight: 900;
+            font-size: 2.5rem;
+        }
+
+        .hero-gradient-text {
+            background: linear-gradient(135deg, var(--pf-primary-light), var(--pf-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--pf-bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--pf-border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--pf-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <i class="bi bi-lightning-charge-fill brand-icon"></i>
+                PowerFit
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">
+                            <i class="bi bi-house-door"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'socio' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_socios' %}">
+                            <i class="bi bi-people"></i> Socios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'entrenador' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_entrenadores' %}">
+                            <i class="bi bi-person-badge"></i> Entrenadores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'rutina' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_rutinas' %}">
+                            <i class="bi bi-clipboard-check"></i> Rutinas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'asistencia' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_asistencias' %}">
+                            <i class="bi bi-calendar-check"></i> Asistencias
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            {% block contenido %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container text-center">
+            <span><i class="bi bi-lightning-charge-fill" style="color: var(--pf-primary-light);"></i> PowerFit &copy; 2026 — Sistema de Gestión de Gimnasio</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

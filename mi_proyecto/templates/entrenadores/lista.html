@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Entrenadores{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <h1><i class="bi bi-person-badge-fill me-2" style="color: var(--pf-accent);"></i>Entrenadores</h1>
+        <p>Equipo de entrenadores profesionales de PowerFit</p>
+    </div>
+    <a href="{% url 'crear_entrenador' %}" class="btn btn-accent">
+        <i class="bi bi-person-badge me-1"></i> Nuevo Entrenador
+    </a>
+</div>
+
+{% if entrenadores %}
+<div class="row g-4">
+    {% for entrenador in entrenadores %}
+    <div class="col-md-6 col-lg-4 animate-in">
+        <div class="card-custom h-100">
+            <div class="card-body text-center">
+                <div class="stat-icon teal mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.8rem;">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <h5 style="font-weight: 700;">{{ entrenador.nombre }} {{ entrenador.apellido }}</h5>
+                <p style="color: var(--pf-accent); font-weight: 600; margin-bottom: 0.5rem;">
+                    {{ entrenador.especialidad }}
+                </p>
+                <p style="color: var(--pf-text-muted); font-size: 0.9rem;">
+                    <i class="bi bi-envelope me-1"></i> {{ entrenador.email }}
+                </p>
+                <span class="badge-turno badge-{{ entrenador.turno }}">
+                    <i class="bi bi-clock me-1"></i>
+                    Turno {{ entrenador.get_turno_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card-custom">
+    <div class="empty-state">
+        <i class="bi bi-person-badge d-block"></i>
+        <h5>No hay entrenadores registrados</h5>
+        <p>Agregá el primer entrenador al equipo de PowerFit.</p>
+        <a href="{% url 'crear_entrenador' %}" class="btn btn-accent mt-2">
+            <i class="bi bi-person-badge me-1"></i> Agregar Entrenador
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

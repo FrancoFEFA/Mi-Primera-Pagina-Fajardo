@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Asistencias{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-calendar-check-fill me-2" style="color: var(--pf-success);"></i>Asistencias</h1>
+        <p>Registro completo de asistencias al gimnasio</p>
+    </div>
+</div>
+
+{% if asistencias %}
+<div class="card-custom">
+    <div class="table-responsive">
+        <table class="table table-custom mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Socio</th>
+                    <th>Actividad</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asistencia in asistencias %}
+                <tr class="animate-in">
+                    <td style="color: var(--pf-text-muted);">{{ forloop.counter }}</td>
+                    <td style="font-weight: 600;">
+                        <i class="bi bi-person-circle me-1" style="color: var(--pf-primary-light);"></i>
+                        {{ asistencia.socio.nombre }} {{ asistencia.socio.apellido }}
+                    </td>
+                    <td>
+                        <span class="badge-membresia badge-premium">
+                            {{ asistencia.get_tipo_actividad_display }}
+                        </span>
+                    </td>
+                    <td style="color: var(--pf-text-muted);">
+                        <i class="bi bi-clock me-1"></i>
+                        {{ asistencia.fecha|date:"d/m/Y H:i" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card-custom">
+    <div class="empty-state">
+        <i class="bi bi-calendar-x d-block"></i>
+        <h5>No hay asistencias registradas</h5>
+        <p>Las asistencias se pueden cargar desde el panel de administración.</p>
+        <a href="/admin/" class="btn btn-outline-custom mt-2">
+            <i class="bi bi-gear me-1"></i> Ir al Panel Admin
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

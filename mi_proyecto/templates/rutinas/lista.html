@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Rutinas{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <h1><i class="bi bi-clipboard-check-fill me-2" style="color: var(--pf-warning);"></i>Rutinas</h1>
+        <p>Rutinas de entrenamiento disponibles en PowerFit</p>
+    </div>
+    <a href="{% url 'crear_rutina' %}" class="btn btn-primary-custom">
+        <i class="bi bi-clipboard-plus me-1"></i> Nueva Rutina
+    </a>
+</div>
+
+<!-- BUSCADOR -->
+<div class="card-custom mb-4 animate-in">
+    <div class="card-body p-4">
+        <form method="GET" action="{% url 'lista_rutinas' %}">
+            <div class="row align-items-end g-3">
+                <div class="col-lg-9">
+                    <label class="form-label">
+                        <i class="bi bi-search me-1"></i> Buscar Rutina
+                    </label>
+                    <div class="search-bar">
+                        <i class="bi bi-search search-icon"></i>
+                        {{ form_busqueda.consulta }}
+                    </div>
+                    <small class="text-muted mt-1 d-block" style="color: var(--pf-text-muted) !important;">
+                        Buscá por nombre de rutina o especialidad del entrenador
+                    </small>
+                </div>
+                <div class="col-lg-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="bi bi-search me-1"></i> Buscar
+                    </button>
+                    {% if consulta %}
+                    <a href="{% url 'lista_rutinas' %}" class="btn btn-outline-custom" title="Limpiar búsqueda">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if consulta %}
+<div class="alert mb-4" style="background: rgba(108, 60, 224, 0.1); border: 1px solid var(--pf-primary); border-radius: 12px; color: var(--pf-text);">
+    <i class="bi bi-info-circle me-2" style="color: var(--pf-primary-light);"></i>
+    Se encontraron <strong>{{ rutinas|length }}</strong> resultado{{ rutinas|length|pluralize:"," }} para "<strong>{{ consulta }}</strong>"
+</div>
+{% endif %}
+
+<!-- LISTA DE RUTINAS -->
+{% if rutinas %}
+<div class="row g-4">
+    {% for rutina in rutinas %}
+    <div class="col-md-6 animate-in">
+        <div class="card-custom h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 style="font-weight: 700; margin-bottom: 0;">{{ rutina.nombre }}</h5>
+                    <span class="badge-membresia badge-premium">
+                        <i class="bi bi-calendar3 me-1"></i>{{ rutina.duracion_semanas }} sem.
+                    </span>
+                </div>
+
+                <p style="color: var(--pf-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                    {{ rutina.descripcion|truncatewords:25 }}
+                </p>
+
+                <div class="d-flex align-items-center gap-2 mb-3 p-2 rounded-3" style="background: rgba(20, 184, 166, 0.06); border: 1px solid var(--pf-border);">
+                    <div class="stat-icon teal" style="width: 36px; height: 36px; font-size: 1rem;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div>
+                        <small style="color: var(--pf-text-muted); display: block;">Entrenador</small>
+                        <span style="font-weight: 600; font-size: 0.9rem;">
+                            {{ rutina.entrenador.nombre }} {{ rutina.entrenador.apellido }}
+                        </span>
+                        <small style="color: var(--pf-accent); display: block;">{{ rutina.entrenador.especialidad }}</small>
+                    </div>
+                </div>
+
+                {% if rutina.socios.all %}
+                <div>
+                    <small style="color: var(--pf-text-muted); font-weight: 600;">
+                        <i class="bi bi-people me-1"></i> Socios asignados ({{ rutina.socios.count }}):
+                    </small>
+                    <div class="mt-1 d-flex flex-wrap gap-1">
+                        {% for socio in rutina.socios.all %}
+                        <span class="badge-membresia badge-basica" style="font-size: 0.75rem;">
+                            {{ socio.nombre }} {{ socio.apellido }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <small style="color: var(--pf-text-muted);">
+                    <i class="bi bi-people me-1"></i> Sin socios asignados
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card-custom">
+    <div class="empty-state">
+        <i class="bi bi-clipboard-x d-block"></i>
+        {% if consulta %}
+            <h5>No se encontraron resultados</h5>
+            <p>No hay rutinas que coincidan con "<strong>{{ consulta }}</strong>".</p>
+            <a href="{% url 'lista_rutinas' %}" class="btn btn-outline-custom mt-2">
+                <i class="bi bi-x-lg me-1"></i> Limpiar búsqueda
+            </a>
+        {% else %}
+            <h5>No hay rutinas creadas</h5>
+            <p>Creá la primera rutina de entrenamiento.</p>
+            <a href="{% url 'crear_rutina' %}" class="btn btn-primary-custom mt-2">
+                <i class="bi bi-clipboard-plus me-1"></i> Crear Rutina
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

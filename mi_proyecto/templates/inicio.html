@@ -1,9 +1,144 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mi sitio</title>
-</head>
-<body>
-    <h1>Bienvenido</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Inicio{% endblock %}
+
+{% block contenido %}
+
+<!-- HERO -->
+<div class="hero-section animate-in">
+    <div class="row align-items-center">
+        <div class="col-lg-7">
+            <h1>Bienvenido a <span class="hero-gradient-text">PowerFit</span></h1>
+            <p class="lead mt-3" style="color: var(--pf-text-muted);">
+                Gestión integral de tu gimnasio: socios, entrenadores, rutinas y asistencias — todo en un solo lugar.
+            </p>
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+                <a href="{% url 'crear_socio' %}" class="btn btn-primary-custom">
+                    <i class="bi bi-person-plus me-1"></i> Nuevo Socio
+                </a>
+                <a href="{% url 'lista_rutinas' %}" class="btn btn-outline-custom">
+                    <i class="bi bi-search me-1"></i> Buscar Rutinas
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+            <i class="bi bi-lightning-charge-fill" style="font-size: 8rem; opacity: 0.08; color: var(--pf-primary-light);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- ESTADÍSTICAS -->
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-lg-3 animate-in">
+        <div class="stat-card purple">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="stat-icon purple">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <span class="stat-label">Socios</span>
+            </div>
+            <div class="stat-value">{{ total_socios }}</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 animate-in">
+        <div class="stat-card teal">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="stat-icon teal">
+                    <i class="bi bi-person-badge-fill"></i>
+                </div>
+                <span class="stat-label">Entrenadores</span>
+            </div>
+            <div class="stat-value">{{ total_entrenadores }}</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 animate-in">
+        <div class="stat-card amber">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="stat-icon amber">
+                    <i class="bi bi-clipboard-check-fill"></i>
+                </div>
+                <span class="stat-label">Rutinas</span>
+            </div>
+            <div class="stat-value">{{ total_rutinas }}</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 animate-in">
+        <div class="stat-card green">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="stat-icon green">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <span class="stat-label">Asistencias</span>
+            </div>
+            <div class="stat-value">{{ total_asistencias }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- ACCESOS RÁPIDOS + ÚLTIMAS ASISTENCIAS -->
+<div class="row g-4">
+    <div class="col-lg-6 animate-in">
+        <div class="card-custom h-100">
+            <div class="card-body">
+                <h5 class="mb-4" style="font-weight: 700;">
+                    <i class="bi bi-grid-fill me-2" style="color: var(--pf-primary-light);"></i>
+                    Accesos Rápidos
+                </h5>
+                <div class="d-flex flex-column gap-3">
+                    <a href="{% url 'crear_socio' %}" class="d-flex align-items-center gap-3 text-decoration-none p-3 rounded-3" style="background: rgba(108, 60, 224, 0.06); border: 1px solid var(--pf-border); transition: all 0.2s;">
+                        <div class="stat-icon purple"><i class="bi bi-person-plus"></i></div>
+                        <div>
+                            <div style="color: var(--pf-text); font-weight: 600;">Alta de Socio</div>
+                            <small style="color: var(--pf-text-muted);">Registrar un nuevo miembro</small>
+                        </div>
+                    </a>
+                    <a href="{% url 'crear_entrenador' %}" class="d-flex align-items-center gap-3 text-decoration-none p-3 rounded-3" style="background: rgba(20, 184, 166, 0.06); border: 1px solid var(--pf-border); transition: all 0.2s;">
+                        <div class="stat-icon teal"><i class="bi bi-person-badge"></i></div>
+                        <div>
+                            <div style="color: var(--pf-text); font-weight: 600;">Alta de Entrenador</div>
+                            <small style="color: var(--pf-text-muted);">Agregar un nuevo entrenador</small>
+                        </div>
+                    </a>
+                    <a href="{% url 'crear_rutina' %}" class="d-flex align-items-center gap-3 text-decoration-none p-3 rounded-3" style="background: rgba(245, 158, 11, 0.06); border: 1px solid var(--pf-border); transition: all 0.2s;">
+                        <div class="stat-icon amber"><i class="bi bi-clipboard-plus"></i></div>
+                        <div>
+                            <div style="color: var(--pf-text); font-weight: 600;">Crear Rutina</div>
+                            <small style="color: var(--pf-text-muted);">Diseñar una nueva rutina</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 animate-in">
+        <div class="card-custom h-100">
+            <div class="card-body">
+                <h5 class="mb-4" style="font-weight: 700;">
+                    <i class="bi bi-clock-history me-2" style="color: var(--pf-accent);"></i>
+                    Últimas Asistencias
+                </h5>
+                {% if ultimas_asistencias %}
+                    <div class="d-flex flex-column gap-2">
+                        {% for asistencia in ultimas_asistencias %}
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                            <div>
+                                <div style="font-weight: 600;">{{ asistencia.socio.nombre }} {{ asistencia.socio.apellido }}</div>
+                                <small style="color: var(--pf-text-muted);">{{ asistencia.get_tipo_actividad_display }}</small>
+                            </div>
+                            <small style="color: var(--pf-text-muted);">{{ asistencia.fecha|date:"d/m/Y H:i" }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-calendar-x d-block"></i>
+                        <p>No hay asistencias registradas aún.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
