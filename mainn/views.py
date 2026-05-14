@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
 from .models import Socio, Entrenador, Rutina, Asistencia
-from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm
+from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm, FotoEntrenadorForm
 
 
 def inicio(request):
@@ -62,6 +62,31 @@ def crear_entrenador(request):
 
 
 # ========================
+# VISTA DE FOTOS DE ENTRENADORES
+# ========================
+
+def upload_foto_entrenador(request, entrenador_id):
+    entrenador = Entrenador.objects.get(id=entrenador_id)
+    if request.method == 'POST':
+        form = FotoEntrenadorForm(request.POST, request.FILES, instance=entrenador)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_entrenadores')
+    else:
+        form = FotoEntrenadorForm(instance=entrenador)
+    return render(request, 'entrenadores/upload_foto.html', {'form': form, 'entrenador': entrenador})
+
+
+def eliminar_foto_entrenador(request, entrenador_id):
+    entrenador = Entrenador.objects.get(id=entrenador_id)
+    if entrenador.foto:
+        entrenador.foto.delete()
+    entrenador.foto = None
+    entrenador.save()
+    return redirect('upload_foto_entrenador', entrenador_id=entrenador.id)
+
+
+# ========================
 # VISTAS DE RUTINAS
 # ========================
 
@@ -97,8 +122,28 @@ def crear_rutina(request):
     return render(request, 'rutinas/crear.html', {'form': form})
 
 
+def editar_socio(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if request.method == 'POST':
+        form = SocioForm(request.POST, instance=socio)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_socios')
+    else:
+        form = SocioForm(instance=socio)
+    return render(request, 'socios/crear.html', {'form': form})
+
+
+def eliminar_socio(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if request.method == 'POST':
+        socio.delete()
+        return redirect('lista_socios')
+    return render(request, 'socios/confirmar_eliminar.html', {'socio': socio})
+
+
 # ========================
-# VISTA DE AVATARES
+# VISTAS DE AVATARES
 # ========================
 
 def upload_avatar(request, socio_id):

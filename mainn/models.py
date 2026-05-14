@@ -52,6 +52,12 @@ class Entrenador(models.Model):
         choices=TURNO_CHOICES,
         default='mañana',
     )
+    foto = models.ImageField(
+        upload_to='entrenadores/',
+        blank=True,
+        null=True,
+        verbose_name='Foto',
+    )
 
     def __str__(self):
         return f"{self.nombre} {self.apellido} - {self.especialidad}"

@@ -107,6 +107,21 @@ class RutinaForm(forms.ModelForm):
         }
 
 
+class FotoEntrenadorForm(forms.ModelForm):
+    class Meta:
+        model = Entrenador
+        fields = ['foto']
+        widgets = {
+            'foto': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }),
+        }
+        labels = {
+            'foto': 'Foto del entrenador',
+        }
+
+
 class AvatarForm(forms.ModelForm):
     class Meta:
         model = Socio
