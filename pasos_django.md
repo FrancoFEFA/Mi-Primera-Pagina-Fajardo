@@ -25,11 +25,11 @@ Luego ejecute el comando:
  Para desactivar:
  deactivate
 
-    # Linux/Mac
-    source .venv/bin/activate
+    # Linux/Mac (GitBash)
+    source .venv/Scripts/activate
     . .venv/bin/activate
     ```
-
+    
 11. instalar django con el manejador de paquetes de python `pip` con el comando `pip install Django`
 12. crear el requirements.txt con los datos de las dependencias usando el comando `pip freeze > requirements.txt` (`**`)
 13. crear el proyecto django donde estamos trabajando con el comando `django-admin startproject mi_proyecto .` (`***`)
