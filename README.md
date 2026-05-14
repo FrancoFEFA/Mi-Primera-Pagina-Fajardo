@@ -92,7 +92,7 @@ tzdata==2026.1
 
 ```bash
 # Si clona desde GitHub
-git clone https://github.com/tu-usuario/segunda-entrega-noop.git
+git clone https://github.com/tu-usuario/segunda-entrega-noop.git #arreglar
 cd SegundaEntreganoop
 ```
 
@@ -105,8 +105,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 .\.venv\Scripts\Activate.ps1
 ```
 
-**En Windows (CMD):**
-```cmd
+**En Windows:**
+```shell
 python -m venv .venv
 .venv\Scripts\activate
 ```

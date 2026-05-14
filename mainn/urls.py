@@ -7,6 +7,8 @@ urlpatterns = [
     # Socios
     path('socios/', views.lista_socios, name='lista_socios'),
     path('socios/crear/', views.crear_socio, name='crear_socio'),
+    path('socios/<int:socio_id>/avatar/', views.upload_avatar, name='upload_avatar'),
+    path('socios/<int:socio_id>/avatar/eliminar/', views.eliminar_avatar, name='eliminar_avatar'),
 
     # Entrenadores
     path('entrenadores/', views.lista_entrenadores, name='lista_entrenadores'),

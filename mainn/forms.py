@@ -107,6 +107,21 @@ class RutinaForm(forms.ModelForm):
         }
 
 
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Socio
+        fields = ['avatar']
+        widgets = {
+            'avatar': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }),
+        }
+        labels = {
+            'avatar': 'Foto de perfil',
+        }
+
+
 class BuscarRutinaForm(forms.Form):
     """Formulario de búsqueda de rutinas por nombre o especialidad del entrenador."""
 

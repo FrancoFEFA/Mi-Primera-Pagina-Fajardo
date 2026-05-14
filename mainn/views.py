@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 from .models import Socio, Entrenador, Rutina, Asistencia
-from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm
+from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm
 
 
 def inicio(request):
@@ -95,6 +95,31 @@ def crear_rutina(request):
     else:
         form = RutinaForm()
     return render(request, 'rutinas/crear.html', {'form': form})
+
+
+# ========================
+# VISTA DE AVATARES
+# ========================
+
+def upload_avatar(request, socio_id):
+    socio = Socio.objects.get(id=socio_id)
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES, instance=socio)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_socios')
+    else:
+        form = AvatarForm(instance=socio)
+    return render(request, 'socios/upload_avatar.html', {'form': form, 'socio': socio})
+
+
+def eliminar_avatar(request, socio_id):
+    socio = Socio.objects.get(id=socio_id)
+    if socio.avatar:
+        socio.avatar.delete()
+    socio.avatar = None
+    socio.save()
+    return redirect('upload_avatar', socio_id=socio.id)
 
 
 # ========================

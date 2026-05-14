@@ -19,6 +19,12 @@ class Socio(models.Model):
         default='basica',
     )
     fecha_inscripcion = models.DateField(auto_now_add=True)
+    avatar = models.ImageField(
+        upload_to='avatares/',
+        blank=True,
+        null=True,
+        verbose_name='Avatar',
+    )
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
