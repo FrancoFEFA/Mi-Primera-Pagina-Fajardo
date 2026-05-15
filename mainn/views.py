@@ -73,6 +73,14 @@ def editar_entrenador(request, entrenador_id):
     return render(request, 'entrenadores/editar.html', {'form': form, 'entrenador': entrenador})
 
 
+def eliminar_entrenador(request, entrenador_id):
+    entrenador = get_object_or_404(Entrenador, id=entrenador_id)
+    if request.method == 'POST':
+        entrenador.delete()
+        return redirect('lista_entrenadores')
+    return render(request, 'entrenadores/confirmar_eliminar.html', {'entrenador': entrenador})
+
+
 # ========================
 # VISTA DE FOTOS DE ENTRENADORES
 # ========================
@@ -132,6 +140,26 @@ def crear_rutina(request):
     else:
         form = RutinaForm()
     return render(request, 'rutinas/crear.html', {'form': form})
+
+
+def editar_rutina(request, rutina_id):
+    rutina = Rutina.objects.get(id=rutina_id)
+    if request.method == 'POST':
+        form = RutinaForm(request.POST, instance=rutina)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_rutinas')
+    else:
+        form = RutinaForm(instance=rutina)
+    return render(request, 'rutinas/editar.html', {'form': form, 'rutina': rutina})
+
+
+def eliminar_rutina(request, rutina_id):
+    rutina = Rutina.objects.get(id=rutina_id)
+    if request.method == 'POST':
+        rutina.delete()
+        return redirect('lista_rutinas')
+    return render(request, 'rutinas/confirmar_eliminar.html', {'rutina': rutina})
 
 
 def editar_socio(request, socio_id):
