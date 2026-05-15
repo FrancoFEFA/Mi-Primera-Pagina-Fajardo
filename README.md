@@ -55,6 +55,57 @@ Sistema web de gestión integral para gimnasios desarrollado con **Django 6.0** 
 
 ---
 
+## ✨ Características
+
+### 🧑‍💼 Gestión de Socios
+- Registrar nuevos socios
+- Asignar tipos de membresía (Básica, Premium, VIP)
+- Listar todos los socios registrados
+- Ver información detallada: nombre, apellido, email, tipo de membresía
+- Registro automático de fecha de inscripción
+- **Upload de avatar** con visualización circular
+- **Check-in rápido** para registrar asistencia al instante
+- Editar y eliminar socios con confirmación
+
+### 👨‍🏫 Gestión de Entrenadores
+- Registrar entrenadores con especialidades
+- Asignar turnos de trabajo (Mañana, Tarde, Noche)
+- Listar todos los entrenadores
+- Registrar email de contacto
+- **Upload de foto** de perfil
+- Editar y eliminar entrenadores
+
+### 💪 Gestión de Rutinas
+- Crear rutinas de entrenamiento personalizadas
+- Asignar rutinas a entrenadores
+- Vincular rutinas a socios
+- Especificar duración de las rutinas (en semanas)
+- **Búsqueda avanzada** por nombre de rutina o especialidad del entrenador
+- Editar y eliminar rutinas
+
+### 📊 Registro de Asistencias
+- Registrar asistencias de socios
+- Categorizar por tipo de actividad (Musculación, Cardio, CrossFit, Yoga, Spinning, Funcional)
+- Listar historial de asistencias ordenado por fecha
+- **Check-in rápido** desde lista de socios
+- **Eliminar asistencia** con confirmación
+- Visualizar las últimas 5 asistencias en la página de inicio
+
+### 📈 Panel de Estadísticas
+- Página de inicio con estadísticas generales:
+  - Total de socios registrados
+  - Total de entrenadores
+  - Total de rutinas
+  - Total de asistencias
+  - Últimas asistencias registradas
+
+### 🔔 Sistema de Notificaciones
+- Mensajes toast success/error/warning/info
+- Auto-desaparición a los 4 segundos
+- Integración en todas las operaciones CRUD
+
+---
+
 ## 🛠️ Stack Tecnológico
 
 | Componente | Tecnología |
