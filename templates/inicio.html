@@ -12,11 +12,14 @@
             <p class="lead mt-3" style="color: var(--pf-text-muted);">
                 Gestión integral de tu gimnasio: socios, entrenadores, rutinas y asistencias — todo en un solo lugar.
             </p>
-            <div class="d-flex gap-3 mt-4 flex-wrap">
-                <a href="{% url 'crear_socio' %}" class="btn btn-primary-custom">
+            <div class="d-flex gap-2 mt-4" style="padding-left: 0;">
+                <a href="{% url 'lista_asistencias' %}" class="btn btn-primary-custom flex-fill">
+                    <i class="bi bi-calendar-check-fill me-1"></i> Asistencia +
+                </a>
+                <a href="{% url 'crear_socio' %}" class="btn btn-outline-custom flex-fill text-nowrap">
                     <i class="bi bi-person-plus me-1"></i> Nuevo Socio
                 </a>
-                <a href="{% url 'lista_rutinas' %}" class="btn btn-outline-custom">
+                <a href="{% url 'lista_rutinas' %}" class="btn btn-outline-custom flex-fill text-nowrap">
                     <i class="bi bi-search me-1"></i> Buscar Rutinas
                 </a>
             </div>

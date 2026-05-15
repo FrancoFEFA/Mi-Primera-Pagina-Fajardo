@@ -61,6 +61,18 @@ def crear_entrenador(request):
     return render(request, 'entrenadores/crear.html', {'form': form})
 
 
+def editar_entrenador(request, entrenador_id):
+    entrenador = Entrenador.objects.get(id=entrenador_id)
+    if request.method == 'POST':
+        form = EntrenadorForm(request.POST, instance=entrenador)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_entrenadores')
+    else:
+        form = EntrenadorForm(instance=entrenador)
+    return render(request, 'entrenadores/editar.html', {'form': form, 'entrenador': entrenador})
+
+
 # ========================
 # VISTA DE FOTOS DE ENTRENADORES
 # ========================
