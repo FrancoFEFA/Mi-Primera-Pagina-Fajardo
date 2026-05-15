@@ -252,6 +252,15 @@ def crear_asistencia(request):
     return render(request, 'asistencias/crear.html', {'form': form})
 
 
+def eliminar_asistencia(request, asistencia_id):
+    asistencia = get_object_or_404(Asistencia, id=asistencia_id)
+    if request.method == 'POST':
+        asistencia.delete()
+        messages.success(request, 'Asistencia eliminada correctamente.')
+        return redirect('lista_asistencias')
+    return render(request, 'asistencias/confirmar_eliminar.html', {'asistencia': asistencia})
+
+
 def checkin_rapido(request, socio_id):
     """Registra asistencia rápida para un socio con actividad 'musculacion' por defecto."""
     socio = get_object_or_404(Socio, id=socio_id)
