@@ -64,6 +64,9 @@
                     <td style="color: var(--pf-text-muted);">{{ socio.fecha_inscripcion|date:"d/m/Y" }}</td>
                     <td>
                         <div class="d-flex gap-2" style="white-space: nowrap;">
+                            <a href="{% url 'checkin_rapido' socio.id %}" class="btn btn-sm" style="background: var(--pf-success); color: #fff; border: none;" title="Check-in rápido">
+                                <i class="bi bi-check-circle"></i>
+                            </a>
                             <a href="{% url 'editar_socio' socio.id %}" class="btn btn-sm btn-outline-custom" title="Editar socio">
                                 <i class="bi bi-pencil"></i>
                             </a>

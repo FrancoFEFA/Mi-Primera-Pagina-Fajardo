@@ -1,5 +1,5 @@
 from django import forms
-from .models import Socio, Entrenador, Rutina
+from .models import Socio, Entrenador, Rutina, Asistencia
 
 
 class SocioForm(forms.ModelForm):
@@ -134,6 +134,26 @@ class AvatarForm(forms.ModelForm):
         }
         labels = {
             'avatar': 'Foto de perfil',
+        }
+
+
+class AsistenciaForm(forms.ModelForm):
+    """Formulario para registrar una nueva asistencia."""
+
+    class Meta:
+        model = Asistencia
+        fields = ['socio', 'tipo_actividad']
+        widgets = {
+            'socio': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+            'tipo_actividad': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+        }
+        labels = {
+            'socio': 'Socio',
+            'tipo_actividad': 'Tipo de actividad',
         }
 
 

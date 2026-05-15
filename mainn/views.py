@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.db.models import Q
 
 from .models import Socio, Entrenador, Rutina, Asistencia
-from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm, FotoEntrenadorForm
+from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm, FotoEntrenadorForm, AsistenciaForm
 
 
 def inicio(request):
@@ -33,7 +34,9 @@ def crear_socio(request):
         form = SocioForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Socio creado exitosamente.')
             return redirect('lista_socios')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = SocioForm()
     return render(request, 'socios/crear.html', {'form': form})
@@ -55,7 +58,9 @@ def crear_entrenador(request):
         form = EntrenadorForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Entrenador creado exitosamente.')
             return redirect('lista_entrenadores')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = EntrenadorForm()
     return render(request, 'entrenadores/crear.html', {'form': form})
@@ -67,7 +72,9 @@ def editar_entrenador(request, entrenador_id):
         form = EntrenadorForm(request.POST, instance=entrenador)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Entrenador actualizado exitosamente.')
             return redirect('lista_entrenadores')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = EntrenadorForm(instance=entrenador)
     return render(request, 'entrenadores/editar.html', {'form': form, 'entrenador': entrenador})
@@ -77,6 +84,7 @@ def eliminar_entrenador(request, entrenador_id):
     entrenador = get_object_or_404(Entrenador, id=entrenador_id)
     if request.method == 'POST':
         entrenador.delete()
+        messages.success(request, 'Entrenador eliminado exitosamente.')
         return redirect('lista_entrenadores')
     return render(request, 'entrenadores/confirmar_eliminar.html', {'entrenador': entrenador})
 
@@ -91,7 +99,9 @@ def upload_foto_entrenador(request, entrenador_id):
         form = FotoEntrenadorForm(request.POST, request.FILES, instance=entrenador)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Foto actualizada exitosamente.')
             return redirect('lista_entrenadores')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = FotoEntrenadorForm(instance=entrenador)
     return render(request, 'entrenadores/upload_foto.html', {'form': form, 'entrenador': entrenador})
@@ -103,6 +113,7 @@ def eliminar_foto_entrenador(request, entrenador_id):
         entrenador.foto.delete()
     entrenador.foto = None
     entrenador.save()
+    messages.success(request, 'Foto eliminada exitosamente.')
     return redirect('upload_foto_entrenador', entrenador_id=entrenador.id)
 
 
@@ -136,7 +147,9 @@ def crear_rutina(request):
         form = RutinaForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Rutina creada exitosamente.')
             return redirect('lista_rutinas')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = RutinaForm()
     return render(request, 'rutinas/crear.html', {'form': form})
@@ -148,7 +161,9 @@ def editar_rutina(request, rutina_id):
         form = RutinaForm(request.POST, instance=rutina)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Rutina actualizada exitosamente.')
             return redirect('lista_rutinas')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = RutinaForm(instance=rutina)
     return render(request, 'rutinas/editar.html', {'form': form, 'rutina': rutina})
@@ -158,6 +173,7 @@ def eliminar_rutina(request, rutina_id):
     rutina = Rutina.objects.get(id=rutina_id)
     if request.method == 'POST':
         rutina.delete()
+        messages.success(request, 'Rutina eliminada exitosamente.')
         return redirect('lista_rutinas')
     return render(request, 'rutinas/confirmar_eliminar.html', {'rutina': rutina})
 
@@ -168,7 +184,9 @@ def editar_socio(request, socio_id):
         form = SocioForm(request.POST, instance=socio)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Socio actualizado exitosamente.')
             return redirect('lista_socios')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = SocioForm(instance=socio)
     return render(request, 'socios/crear.html', {'form': form})
@@ -178,6 +196,7 @@ def eliminar_socio(request, socio_id):
     socio = get_object_or_404(Socio, id=socio_id)
     if request.method == 'POST':
         socio.delete()
+        messages.success(request, 'Socio eliminado exitosamente.')
         return redirect('lista_socios')
     return render(request, 'socios/confirmar_eliminar.html', {'socio': socio})
 
@@ -192,7 +211,9 @@ def upload_avatar(request, socio_id):
         form = AvatarForm(request.POST, request.FILES, instance=socio)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Avatar actualizado exitosamente.')
             return redirect('lista_socios')
+        messages.error(request, 'Corrige los errores del formulario.')
     else:
         form = AvatarForm(instance=socio)
     return render(request, 'socios/upload_avatar.html', {'form': form, 'socio': socio})
@@ -204,6 +225,7 @@ def eliminar_avatar(request, socio_id):
         socio.avatar.delete()
     socio.avatar = None
     socio.save()
+    messages.success(request, 'Avatar eliminado exitosamente.')
     return redirect('upload_avatar', socio_id=socio.id)
 
 
@@ -215,3 +237,24 @@ def lista_asistencias(request):
     """Vista que muestra la lista de todas las asistencias registradas."""
     asistencias = Asistencia.objects.select_related('socio').all().order_by('-fecha')
     return render(request, 'asistencias/lista.html', {'asistencias': asistencias})
+
+
+def crear_asistencia(request):
+    """Vista para registrar una nueva asistencia."""
+    if request.method == 'POST':
+        form = AsistenciaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Asistencia registrada correctamente.')
+            return redirect('lista_asistencias')
+    else:
+        form = AsistenciaForm()
+    return render(request, 'asistencias/crear.html', {'form': form})
+
+
+def checkin_rapido(request, socio_id):
+    """Registra asistencia rápida para un socio con actividad 'musculacion' por defecto."""
+    socio = get_object_or_404(Socio, id=socio_id)
+    Asistencia.objects.create(socio=socio, tipo_actividad='musculacion')
+    messages.success(request, f'Check-in registrado para {socio.nombre} {socio.apellido}.')
+    return redirect('lista_socios')

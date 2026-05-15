@@ -9,6 +9,9 @@
         <h1><i class="bi bi-calendar-check-fill me-2" style="color: var(--pf-success);"></i>Asistencias</h1>
         <p>Registro completo de asistencias al gimnasio</p>
     </div>
+    <a href="{% url 'crear_asistencia' %}" class="btn btn-primary-custom">
+        <i class="bi bi-plus-lg me-1"></i> Registrar Asistencia
+    </a>
 </div>
 
 {% if asistencias %}
@@ -51,9 +54,9 @@
     <div class="empty-state">
         <i class="bi bi-calendar-x d-block"></i>
         <h5>No hay asistencias registradas</h5>
-        <p>Las asistencias se pueden cargar desde el panel de administración.</p>
-        <a href="/admin/" class="btn btn-outline-custom mt-2">
-            <i class="bi bi-gear me-1"></i> Ir al Panel Admin
+        <p>Registrá la primera asistencia para empezar a llevar el control.</p>
+        <a href="{% url 'crear_asistencia' %}" class="btn btn-primary-custom mt-2">
+            <i class="bi bi-plus-lg me-1"></i> Registrar Primera Asistencia
         </a>
     </div>
 </div>
