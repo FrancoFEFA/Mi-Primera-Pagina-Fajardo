@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Mi perfil{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8 animate-in">
+        <div class="card-custom">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex align-items-center gap-4 flex-wrap mb-4">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="Avatar"
+                             style="width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid var(--pf-primary);">
+                    {% else %}
+                        <div style="width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--pf-primary), var(--pf-accent)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #fff; font-weight: 800;">
+                            {{ request.user.username|first|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="flex-grow-1">
+                        <h2 style="font-weight: 800; margin-bottom: 0.25rem;">
+                            {{ request.user.first_name }} {{ request.user.last_name }}
+                        </h2>
+                        <p style="color: var(--pf-text-muted); margin-bottom: 0.5rem;">
+                            <i class="bi bi-at"></i> {{ request.user.username }}
+                            &middot;
+                            <i class="bi bi-envelope"></i> {{ request.user.email }}
+                        </p>
+                        {% if profile.ciudad %}
+                            <span class="badge-membresia badge-premium">
+                                <i class="bi bi-geo-alt me-1"></i> {{ profile.ciudad }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'accounts:editar_perfil' %}" class="btn btn-primary-custom">
+                        <i class="bi bi-pencil me-1"></i> Editar perfil
+                    </a>
+                </div>
+
+                <hr style="border-color: var(--pf-border);">
+
+                <h5 style="font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-person-lines-fill me-2" style="color: var(--pf-primary-light);"></i>
+                    Información personal
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                            <small style="color: var(--pf-text-muted);">Nombre</small>
+                            <div style="font-weight: 600;">{{ request.user.first_name|default:"—" }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                            <small style="color: var(--pf-text-muted);">Apellido</small>
+                            <div style="font-weight: 600;">{{ request.user.last_name|default:"—" }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                            <small style="color: var(--pf-text-muted);">Email</small>
+                            <div style="font-weight: 600;">{{ request.user.email|default:"—" }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                            <small style="color: var(--pf-text-muted);">Fecha de nacimiento</small>
+                            <div style="font-weight: 600;">
+                                {% if profile.fecha_nacimiento %}{{ profile.fecha_nacimiento|date:"d/m/Y" }}{% else %}—{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-4" style="font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-chat-quote me-2" style="color: var(--pf-accent);"></i>
+                    Biografía
+                </h5>
+                <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                    {% if profile.bio %}
+                        <p class="mb-0" style="white-space: pre-line;">{{ profile.bio }}</p>
+                    {% else %}
+                        <p class="mb-0" style="color: var(--pf-text-muted); font-style: italic;">
+                            Todavía no escribiste tu biografía. ¡Contanos sobre vos!
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{% url 'accounts:logout' %}" class="btn btn-outline-custom">
+                        <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

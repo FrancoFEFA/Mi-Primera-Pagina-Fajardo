@@ -1,9 +1,21 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DeleteView, ListView, UpdateView
 
-from .models import Socio, Entrenador, Rutina, Asistencia
-from .forms import SocioForm, EntrenadorForm, RutinaForm, BuscarRutinaForm, AvatarForm, FotoEntrenadorForm, AsistenciaForm
+from .forms import (
+    AsistenciaForm,
+    AvatarForm,
+    BuscarRutinaForm,
+    EntrenadorForm,
+    FotoEntrenadorForm,
+    RutinaForm,
+    SocioForm,
+)
+from .models import Asistencia, Entrenador, Rutina, Socio
 
 
 def inicio(request):
@@ -18,6 +30,11 @@ def inicio(request):
     return render(request, 'inicio.html', contexto)
 
 
+def acerca_de_mi(request):
+    """Vista estática 'Acerca de mí' con info del proyecto y del autor."""
+    return render(request, 'acerca_de_mi.html')
+
+
 # ========================
 # VISTAS DE SOCIOS
 # ========================
@@ -26,6 +43,18 @@ def lista_socios(request):
     """Vista que muestra la lista de todos los socios registrados."""
     socios = Socio.objects.all().order_by('apellido', 'nombre')
     return render(request, 'socios/lista.html', {'socios': socios})
+
+
+def detalle_socio(request, socio_id):
+    """Vista de detalle de un socio específico (vista de detalle desde el listado)."""
+    socio = get_object_or_404(Socio, id=socio_id)
+    rutinas = socio.rutinas.select_related('entrenador').all()
+    asistencias = socio.asistencias.all()[:10]
+    return render(request, 'socios/detalle.html', {
+        'socio': socio,
+        'rutinas': rutinas,
+        'asistencias': asistencias,
+    })
 
 
 def crear_socio(request):
@@ -67,7 +96,7 @@ def crear_entrenador(request):
 
 
 def editar_entrenador(request, entrenador_id):
-    entrenador = Entrenador.objects.get(id=entrenador_id)
+    entrenador = get_object_or_404(Entrenador, id=entrenador_id)
     if request.method == 'POST':
         form = EntrenadorForm(request.POST, instance=entrenador)
         if form.is_valid():
@@ -94,7 +123,7 @@ def eliminar_entrenador(request, entrenador_id):
 # ========================
 
 def upload_foto_entrenador(request, entrenador_id):
-    entrenador = Entrenador.objects.get(id=entrenador_id)
+    entrenador = get_object_or_404(Entrenador, id=entrenador_id)
     if request.method == 'POST':
         form = FotoEntrenadorForm(request.POST, request.FILES, instance=entrenador)
         if form.is_valid():
@@ -108,7 +137,7 @@ def upload_foto_entrenador(request, entrenador_id):
 
 
 def eliminar_foto_entrenador(request, entrenador_id):
-    entrenador = Entrenador.objects.get(id=entrenador_id)
+    entrenador = get_object_or_404(Entrenador, id=entrenador_id)
     if entrenador.foto:
         entrenador.foto.delete()
     entrenador.foto = None
@@ -118,27 +147,45 @@ def eliminar_foto_entrenador(request, entrenador_id):
 
 
 # ========================
-# VISTAS DE RUTINAS
+# VISTAS DE RUTINAS (CBVs)
 # ========================
 
-def lista_rutinas(request):
-    """Vista que muestra las rutinas con buscador integrado usando Q de Django."""
-    form_busqueda = BuscarRutinaForm(request.GET or None)
-    rutinas = Rutina.objects.select_related('entrenador').prefetch_related('socios').all()
+class RutinaListView(ListView):
+    """CBV #1: ListView con búsqueda por Q objects."""
 
-    consulta = request.GET.get('consulta', '').strip()
-    if consulta:
-        rutinas = rutinas.filter(
-            Q(nombre__icontains=consulta) |
-            Q(entrenador__especialidad__icontains=consulta)
-        )
+    model = Rutina
+    template_name = 'rutinas/lista.html'
+    context_object_name = 'rutinas'
 
-    contexto = {
-        'rutinas': rutinas.order_by('nombre'),
-        'form_busqueda': form_busqueda,
-        'consulta': consulta,
-    }
-    return render(request, 'rutinas/lista.html', contexto)
+    def get_queryset(self):
+        qs = Rutina.objects.select_related('entrenador').prefetch_related('socios').all()
+        consulta = self.request.GET.get('consulta', '').strip()
+        if consulta:
+            qs = qs.filter(
+                Q(nombre__icontains=consulta) |
+                Q(entrenador__especialidad__icontains=consulta)
+            )
+        return qs.order_by('nombre')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['form_busqueda'] = BuscarRutinaForm(self.request.GET or None)
+        ctx['consulta'] = self.request.GET.get('consulta', '').strip()
+        return ctx
+
+
+class RutinaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """CBV #2: DeleteView con mixins LoginRequiredMixin y UserPassesTestMixin."""
+
+    model = Rutina
+    template_name = 'rutinas/confirmar_eliminar.html'
+    success_url = reverse_lazy('lista_rutinas')
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+    def get_login_url(self):
+        return reverse('accounts:login')
 
 
 def crear_rutina(request):
@@ -156,7 +203,7 @@ def crear_rutina(request):
 
 
 def editar_rutina(request, rutina_id):
-    rutina = Rutina.objects.get(id=rutina_id)
+    rutina = get_object_or_404(Rutina, id=rutina_id)
     if request.method == 'POST':
         form = RutinaForm(request.POST, instance=rutina)
         if form.is_valid():
@@ -170,7 +217,7 @@ def editar_rutina(request, rutina_id):
 
 
 def eliminar_rutina(request, rutina_id):
-    rutina = Rutina.objects.get(id=rutina_id)
+    rutina = get_object_or_404(Rutina, id=rutina_id)
     if request.method == 'POST':
         rutina.delete()
         messages.success(request, 'Rutina eliminada exitosamente.')
@@ -206,7 +253,7 @@ def eliminar_socio(request, socio_id):
 # ========================
 
 def upload_avatar(request, socio_id):
-    socio = Socio.objects.get(id=socio_id)
+    socio = get_object_or_404(Socio, id=socio_id)
     if request.method == 'POST':
         form = AvatarForm(request.POST, request.FILES, instance=socio)
         if form.is_valid():
@@ -220,7 +267,7 @@ def upload_avatar(request, socio_id):
 
 
 def eliminar_avatar(request, socio_id):
-    socio = Socio.objects.get(id=socio_id)
+    socio = get_object_or_404(Socio, id=socio_id)
     if socio.avatar:
         socio.avatar.delete()
     socio.avatar = None
@@ -233,8 +280,9 @@ def eliminar_avatar(request, socio_id):
 # VISTAS DE ASISTENCIAS
 # ========================
 
+@login_required
 def lista_asistencias(request):
-    """Vista que muestra la lista de todas las asistencias registradas."""
+    """FBV con decorador @login_required: solo usuarios autenticados pueden ver el listado."""
     asistencias = Asistencia.objects.select_related('socio').all().order_by('-fecha')
     return render(request, 'asistencias/lista.html', {'asistencias': asistencias})
 

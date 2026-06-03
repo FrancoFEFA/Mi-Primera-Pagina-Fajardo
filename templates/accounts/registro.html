@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block titulo %}PowerFit — Registro{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6 animate-in">
+        <div class="card-custom">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="stat-icon teal mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.8rem;">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <h2 style="font-weight: 800;">Crear cuenta</h2>
+                    <p style="color: var(--pf-text-muted);">Sumate a la comunidad PowerFit</p>
+                </div>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-md-{% if field.name == 'username' or field.name == 'email' %}12{% else %}6{% endif %}">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text d-block" style="color: var(--pf-text-muted);">{{ field.help_text|safe }}</small>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in field.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-accent w-100 mt-4">
+                        <i class="bi bi-rocket-takeoff me-1"></i> Crear mi cuenta
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <small style="color: var(--pf-text-muted);">
+                        ¿Ya tenés cuenta?
+                        <a href="{% url 'accounts:login' %}" style="color: var(--pf-accent-light); text-decoration: none; font-weight: 600;">
+                            Iniciá sesión
+                        </a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

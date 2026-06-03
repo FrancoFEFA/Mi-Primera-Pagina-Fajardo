@@ -124,13 +124,16 @@
                 {% if ultimas_asistencias %}
                     <div class="d-flex flex-column gap-2">
                         {% for asistencia in ultimas_asistencias %}
-                        <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                        <a href="{% url 'detalle_socio' asistencia.socio.id %}" class="d-flex justify-content-between align-items-center p-3 rounded-3 text-decoration-none" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border); transition: all 0.2s;">
                             <div>
-                                <div style="font-weight: 600;">{{ asistencia.socio.nombre }} {{ asistencia.socio.apellido }}</div>
+                                <div style="color: var(--pf-text); font-weight: 600;">{{ asistencia.socio.nombre }} {{ asistencia.socio.apellido }}</div>
                                 <small style="color: var(--pf-text-muted);">{{ asistencia.get_tipo_actividad_display }}</small>
                             </div>
-                            <small style="color: var(--pf-text-muted);">{{ asistencia.fecha|date:"d/m/Y H:i" }}</small>
-                        </div>
+                            <div class="text-end">
+                                <small style="color: var(--pf-text-muted);">{{ asistencia.fecha|date:"d/m/Y H:i" }}</small>
+                                <div><small style="color: var(--pf-primary-light);">Ver detalle <i class="bi bi-arrow-right"></i></small></div>
+                            </div>
+                        </a>
                         {% endfor %}
                     </div>
                 {% else %}

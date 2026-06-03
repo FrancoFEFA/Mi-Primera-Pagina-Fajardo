@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mainn.urls')),
+    path('cuentas/', include('accounts.urls', namespace='accounts')),
+    path('mensajes/', include('messaging.urls', namespace='messaging')),
 ]
 
 if settings.DEBUG:

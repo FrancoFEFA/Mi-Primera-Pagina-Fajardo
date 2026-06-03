@@ -47,7 +47,11 @@
                             </a>
                         {% endif %}
                     </td>
-                    <td style="font-weight: 600;">{{ socio.nombre }} {{ socio.apellido }}</td>
+                    <td style="font-weight: 600;">
+                        <a href="{% url 'detalle_socio' socio.id %}" style="color: var(--pf-text); text-decoration: none;">
+                            {{ socio.nombre }} {{ socio.apellido }}
+                        </a>
+                    </td>
                     <td>{{ socio.email }}</td>
                     <td>
                         <span class="badge-membresia badge-{{ socio.tipo_membresia }}">
@@ -64,6 +68,9 @@
                     <td style="color: var(--pf-text-muted);">{{ socio.fecha_inscripcion|date:"d/m/Y" }}</td>
                     <td>
                         <div class="d-flex gap-2" style="white-space: nowrap;">
+                            <a href="{% url 'detalle_socio' socio.id %}" class="btn btn-sm" style="background: rgba(20, 184, 166, 0.2); color: var(--pf-accent-light); border: none;" title="Ver detalle">
+                                <i class="bi bi-eye"></i>
+                            </a>
                             <a href="{% url 'checkin_rapido' socio.id %}" class="btn btn-sm" style="background: var(--pf-success); color: #fff; border: none;" title="Check-in rápido">
                                 <i class="bi bi-check-circle"></i>
                             </a>
