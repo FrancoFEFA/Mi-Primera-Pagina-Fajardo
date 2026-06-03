@@ -89,6 +89,10 @@
             white-space: nowrap;
         }
 
+        .navbar-nav.nav-main {
+            justify-content: space-around;
+        }
+
         .nav-link:hover,
         .nav-link.active {
             color: #fff !important;
@@ -519,34 +523,34 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-lg-center">
+                <ul class="navbar-nav align-items-lg-center flex-grow-1 nav-main">
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">
                             <i class="bi bi-house-door"></i> Inicio
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'socio' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_socios' %}">
+                        <a class="nav-link {% if active_nav.socios %}active{% endif %}" href="{% url 'lista_socios' %}">
                             <i class="bi bi-people"></i> Socios
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'entrenador' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_entrenadores' %}">
+                        <a class="nav-link {% if active_nav.entrenadores %}active{% endif %}" href="{% url 'lista_entrenadores' %}">
                             <i class="bi bi-person-badge"></i> Entrenadores
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'rutina' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_rutinas' %}">
+                        <a class="nav-link {% if active_nav.rutinas %}active{% endif %}" href="{% url 'lista_rutinas' %}">
                             <i class="bi bi-clipboard-check"></i> Rutinas
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'asistencia' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'lista_asistencias' %}">
+                        <a class="nav-link {% if active_nav.asistencias %}active{% endif %}" href="{% url 'lista_asistencias' %}">
                             <i class="bi bi-calendar-check"></i> Asistencias
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'mensaje' in request.resolver_match.url_name or 'bandeja' in request.resolver_match.url_name or 'conversacion' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'messaging:bandeja' %}">
+                        <a class="nav-link {% if active_nav.mensajes %}active{% endif %}" href="{% url 'messaging:bandeja' %}">
                             <i class="bi bi-envelope"></i> Mensajes
                         </a>
                     </li>
@@ -555,6 +559,8 @@
                             <i class="bi bi-info-circle"></i> Acerca
                         </a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-lg-center">
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -573,14 +579,12 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:login' %}">
-                                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+                        <li class="nav-item d-flex align-items-center gap-2">
+                            <a class="btn btn-sm btn-outline-custom" href="{% url 'accounts:login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-sm btn-accent ms-lg-2" href="{% url 'accounts:registro' %}">
-                                <i class="bi bi-person-plus"></i> Registrarse
+                            <a class="btn btn-sm btn-accent" href="{% url 'accounts:registro' %}">
+                                <i class="bi bi-person-plus me-1"></i> Registrarse
                             </a>
                         </li>
                     {% endif %}

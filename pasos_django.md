@@ -72,3 +72,5 @@ Agregué BASE_DIR / 'templates' a DIRS en settings.py
 (`***`) No olvidar el punto al final para que les genere el proyecto donde estan parados y no se creen carpetas de mas  
 (`****`) Como veran es muy similar a lo que se hace en los modelos (no es exactamente igual para todo)  
 (`*****`) Para desactivar el entorno virtual ejecutar el comando `deactivate`
+
+#El problema es que las URLs no matchean con la búsqueda por substring. Mejor crear un context processor que indique qué sección está activa. Es la forma correcta y escalable.
