@@ -1,19 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView
 
 from .forms import MensajeForm
 from .models import Mensaje
 
 
-@method_decorator(login_required, name='dispatch')
-class BandejaEntradaView(ListView):
-    """CBV con LoginRequired (vía method_decorator) que lista los mensajes recibidos."""
-
+# cbv con mixin loginrequired para bandeja de entrada
+class BandejaEntradaView(LoginRequiredMixin, ListView):
     model = Mensaje
     template_name = 'messaging/bandeja.html'
     context_object_name = 'mensajes'
@@ -28,10 +26,8 @@ class BandejaEntradaView(ListView):
         return ctx
 
 
-@method_decorator(login_required, name='dispatch')
-class MensajeCreateView(CreateView):
-    """CBV con LoginRequired para enviar un nuevo mensaje."""
-
+# cbv con mixin loginrequired para enviar mensaje
+class MensajeCreateView(LoginRequiredMixin, CreateView):
     model = Mensaje
     form_class = MensajeForm
     template_name = 'messaging/enviar.html'
@@ -48,16 +44,16 @@ class MensajeCreateView(CreateView):
         return form
 
 
+# fbv con decorador login_required para mensajes enviados
 @login_required
 def mensajes_enviados(request):
-    """FBV con decorador login_required que muestra los mensajes enviados."""
     mensajes = Mensaje.objects.filter(emisor=request.user).select_related('receptor')
     return render(request, 'messaging/enviados.html', {'mensajes': mensajes})
 
 
+# fbv con decorador login_required para ver la conversacion
 @login_required
 def ver_conversacion(request, username):
-    """FBV con decorador login_required que muestra la conversación entre dos usuarios."""
     otro = get_object_or_404(User, username=username)
 
     mensajes = Mensaje.objects.filter(

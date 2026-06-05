@@ -5,11 +5,11 @@ from .models import Profile
 
 
 class RegistroForm(UserCreationForm):
-    """Formulario de registro de nuevos usuarios."""
+    """Formulario de registro de nuevos usuarios con validaciones relajadas."""
 
     email = forms.EmailField(required=True, label='Correo electrónico')
-    first_name = forms.CharField(max_length=50, required=True, label='Nombre')
-    last_name = forms.CharField(max_length=50, required=True, label='Apellido')
+    first_name = forms.CharField(max_length=50, required=False, label='Nombre')
+    last_name = forms.CharField(max_length=50, required=False, label='Apellido')
 
     class Meta:
         model = User
@@ -25,19 +25,56 @@ class RegistroForm(UserCreationForm):
             if isinstance(widget, forms.TextInput) or isinstance(widget, forms.EmailInput) or isinstance(widget, forms.PasswordInput):
                 widget.attrs.setdefault('class', 'form-control')
             placeholder_map = {
-                'username': 'Ej: juanperez',
-                'first_name': 'Tu nombre',
-                'last_name': 'Tu apellido',
+                'username': 'Ej: juanperez, 1234, etc.',
+                'first_name': 'Tu nombre (opcional)',
+                'last_name': 'Tu apellido (opcional)',
                 'email': 'ejemplo@correo.com',
             }
             if field_name in placeholder_map:
                 widget.attrs.setdefault('placeholder', placeholder_map[field_name])
 
+        self.fields['username'].validators = []
+        self.fields['username'].help_text = 'Elegí cualquier nombre de usuario. Sin restricciones.'
+
+        self.fields['password1'].validators = []
+        self.fields['password1'].help_text = 'Mínimo 4 caracteres. Sin otras restricciones.'
+
+    def clean(self):
+        cleaned = forms.Form.clean(self)
+        username = (cleaned.get('username') or '').strip()
+        password1 = cleaned.get('password1') or ''
+        password2 = cleaned.get('password2') or ''
+
+        if not username:
+            self.add_error('username', 'El nombre de usuario es obligatorio.')
+        elif User.objects.filter(username__iexact=username).exists():
+            self.add_error('username', 'Ese nombre de usuario ya está en uso.')
+
+        if not password1:
+            self.add_error('password1', 'La contraseña es obligatoria.')
+        elif len(password1) < 4:
+            self.add_error('password1', 'La contraseña debe tener al menos 4 caracteres.')
+
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', 'Las contraseñas no coinciden.')
+
+        return cleaned
+
+    def clean_password2(self):
+        password2 = self.cleaned_data.get('password2')
+        if not password2:
+            raise forms.ValidationError('La confirmación de contraseña es obligatoria.')
+        return password2
+
+    def _post_clean(self):
+        """Evita la validación global de AUTH_PASSWORD_VALIDATORS."""
+        forms.ModelForm._post_clean(self)
+
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-        user.email = self.cleaned_data['email']
+        user.first_name = self.cleaned_data.get('first_name', '')
+        user.last_name = self.cleaned_data.get('last_name', '')
+        user.email = self.cleaned_data.get('email', '')
         if commit:
             user.save()
             Profile.objects.get_or_create(user=user)

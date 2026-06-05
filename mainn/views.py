@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import DeleteView, ListView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, ListView
 
 from .forms import (
     AsistenciaForm,
@@ -18,8 +18,8 @@ from .forms import (
 from .models import Asistencia, Entrenador, Rutina, Socio
 
 
+# vista principal con estadisticas del gimnasio
 def inicio(request):
-    """Vista de la página de inicio con estadísticas del gimnasio."""
     contexto = {
         'total_socios': Socio.objects.count(),
         'total_entrenadores': Entrenador.objects.count(),
@@ -30,23 +30,19 @@ def inicio(request):
     return render(request, 'inicio.html', contexto)
 
 
+# vista estatica de presentacion del autor
 def acerca_de_mi(request):
-    """Vista estática 'Acerca de mí' con info del proyecto y del autor."""
     return render(request, 'acerca_de_mi.html')
 
 
-# ========================
-# VISTAS DE SOCIOS
-# ========================
+# vistas de socios
 
 def lista_socios(request):
-    """Vista que muestra la lista de todos los socios registrados."""
     socios = Socio.objects.all().order_by('apellido', 'nombre')
     return render(request, 'socios/lista.html', {'socios': socios})
 
 
 def detalle_socio(request, socio_id):
-    """Vista de detalle de un socio específico (vista de detalle desde el listado)."""
     socio = get_object_or_404(Socio, id=socio_id)
     rutinas = socio.rutinas.select_related('entrenador').all()
     asistencias = socio.asistencias.all()[:10]
@@ -57,8 +53,8 @@ def detalle_socio(request, socio_id):
     })
 
 
+@login_required
 def crear_socio(request):
-    """Vista para dar de alta un nuevo socio."""
     if request.method == 'POST':
         form = SocioForm(request.POST)
         if form.is_valid():
@@ -71,18 +67,62 @@ def crear_socio(request):
     return render(request, 'socios/crear.html', {'form': form})
 
 
-# ========================
-# VISTAS DE ENTRENADORES
-# ========================
+def editar_socio(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if request.method == 'POST':
+        form = SocioForm(request.POST, instance=socio)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Socio actualizado exitosamente.')
+            return redirect('lista_socios')
+        messages.error(request, 'Corrige los errores del formulario.')
+    else:
+        form = SocioForm(instance=socio)
+    return render(request, 'socios/crear.html', {'form': form})
+
+
+def eliminar_socio(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if request.method == 'POST':
+        socio.delete()
+        messages.success(request, 'Socio eliminado exitosamente.')
+        return redirect('lista_socios')
+    return render(request, 'socios/confirmar_eliminar.html', {'socio': socio})
+
+
+def upload_avatar(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES, instance=socio)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Avatar actualizado exitosamente.')
+            return redirect('lista_socios')
+        messages.error(request, 'Corrige los errores del formulario.')
+    else:
+        form = AvatarForm(instance=socio)
+    return render(request, 'socios/upload_avatar.html', {'form': form, 'socio': socio})
+
+
+def eliminar_avatar(request, socio_id):
+    socio = get_object_or_404(Socio, id=socio_id)
+    if socio.avatar:
+        socio.avatar.delete()
+    socio.avatar = None
+    socio.save()
+    messages.success(request, 'Avatar eliminado exitosamente.')
+    return redirect('upload_avatar', socio_id=socio.id)
+
+
+# vistas de entrenadores
 
 def lista_entrenadores(request):
-    """Vista que muestra la lista de todos los entrenadores registrados."""
     entrenadores = Entrenador.objects.all().order_by('apellido', 'nombre')
     return render(request, 'entrenadores/lista.html', {'entrenadores': entrenadores})
 
 
+@login_required
 def crear_entrenador(request):
-    """Vista para dar de alta un nuevo entrenador."""
     if request.method == 'POST':
         form = EntrenadorForm(request.POST)
         if form.is_valid():
@@ -118,10 +158,6 @@ def eliminar_entrenador(request, entrenador_id):
     return render(request, 'entrenadores/confirmar_eliminar.html', {'entrenador': entrenador})
 
 
-# ========================
-# VISTA DE FOTOS DE ENTRENADORES
-# ========================
-
 def upload_foto_entrenador(request, entrenador_id):
     entrenador = get_object_or_404(Entrenador, id=entrenador_id)
     if request.method == 'POST':
@@ -146,13 +182,10 @@ def eliminar_foto_entrenador(request, entrenador_id):
     return redirect('upload_foto_entrenador', entrenador_id=entrenador.id)
 
 
-# ========================
-# VISTAS DE RUTINAS (CBVs)
-# ========================
+# vistas de rutinas (listado y baja como cbv)
 
 class RutinaListView(ListView):
-    """CBV #1: ListView con búsqueda por Q objects."""
-
+    # cbv con listview y busqueda por q objects
     model = Rutina
     template_name = 'rutinas/lista.html'
     context_object_name = 'rutinas'
@@ -175,8 +208,7 @@ class RutinaListView(ListView):
 
 
 class RutinaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """CBV #2: DeleteView con mixins LoginRequiredMixin y UserPassesTestMixin."""
-
+    # cbv con mixins loginrequired y userpassestest
     model = Rutina
     template_name = 'rutinas/confirmar_eliminar.html'
     success_url = reverse_lazy('lista_rutinas')
@@ -184,12 +216,9 @@ class RutinaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
-    def get_login_url(self):
-        return reverse('accounts:login')
 
-
+@login_required
 def crear_rutina(request):
-    """Vista para crear una nueva rutina de entrenamiento."""
     if request.method == 'POST':
         form = RutinaForm(request.POST)
         if form.is_valid():
@@ -216,79 +245,17 @@ def editar_rutina(request, rutina_id):
     return render(request, 'rutinas/editar.html', {'form': form, 'rutina': rutina})
 
 
-def eliminar_rutina(request, rutina_id):
-    rutina = get_object_or_404(Rutina, id=rutina_id)
-    if request.method == 'POST':
-        rutina.delete()
-        messages.success(request, 'Rutina eliminada exitosamente.')
-        return redirect('lista_rutinas')
-    return render(request, 'rutinas/confirmar_eliminar.html', {'rutina': rutina})
-
-
-def editar_socio(request, socio_id):
-    socio = get_object_or_404(Socio, id=socio_id)
-    if request.method == 'POST':
-        form = SocioForm(request.POST, instance=socio)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Socio actualizado exitosamente.')
-            return redirect('lista_socios')
-        messages.error(request, 'Corrige los errores del formulario.')
-    else:
-        form = SocioForm(instance=socio)
-    return render(request, 'socios/crear.html', {'form': form})
-
-
-def eliminar_socio(request, socio_id):
-    socio = get_object_or_404(Socio, id=socio_id)
-    if request.method == 'POST':
-        socio.delete()
-        messages.success(request, 'Socio eliminado exitosamente.')
-        return redirect('lista_socios')
-    return render(request, 'socios/confirmar_eliminar.html', {'socio': socio})
-
-
-# ========================
-# VISTAS DE AVATARES
-# ========================
-
-def upload_avatar(request, socio_id):
-    socio = get_object_or_404(Socio, id=socio_id)
-    if request.method == 'POST':
-        form = AvatarForm(request.POST, request.FILES, instance=socio)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Avatar actualizado exitosamente.')
-            return redirect('lista_socios')
-        messages.error(request, 'Corrige los errores del formulario.')
-    else:
-        form = AvatarForm(instance=socio)
-    return render(request, 'socios/upload_avatar.html', {'form': form, 'socio': socio})
-
-
-def eliminar_avatar(request, socio_id):
-    socio = get_object_or_404(Socio, id=socio_id)
-    if socio.avatar:
-        socio.avatar.delete()
-    socio.avatar = None
-    socio.save()
-    messages.success(request, 'Avatar eliminado exitosamente.')
-    return redirect('upload_avatar', socio_id=socio.id)
-
-
-# ========================
-# VISTAS DE ASISTENCIAS
-# ========================
+# vistas de asistencias
 
 @login_required
 def lista_asistencias(request):
-    """FBV con decorador @login_required: solo usuarios autenticados pueden ver el listado."""
+    # fbv con decorador login_required
     asistencias = Asistencia.objects.select_related('socio').all().order_by('-fecha')
     return render(request, 'asistencias/lista.html', {'asistencias': asistencias})
 
 
+@login_required
 def crear_asistencia(request):
-    """Vista para registrar una nueva asistencia."""
     if request.method == 'POST':
         form = AsistenciaForm(request.POST)
         if form.is_valid():
@@ -309,8 +276,8 @@ def eliminar_asistencia(request, asistencia_id):
     return render(request, 'asistencias/confirmar_eliminar.html', {'asistencia': asistencia})
 
 
+@login_required
 def checkin_rapido(request, socio_id):
-    """Registra asistencia rápida para un socio con actividad 'musculacion' por defecto."""
     socio = get_object_or_404(Socio, id=socio_id)
     Asistencia.objects.create(socio=socio, tipo_actividad='musculacion')
     messages.success(request, f'Check-in registrado para {socio.nombre} {socio.apellido}.')

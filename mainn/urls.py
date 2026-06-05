@@ -22,11 +22,11 @@ urlpatterns = [
     path('entrenadores/<int:entrenador_id>/foto/eliminar/', views.eliminar_foto_entrenador, name='eliminar_foto_entrenador'),
     path('entrenadores/<int:entrenador_id>/eliminar/', views.eliminar_entrenador, name='eliminar_entrenador'),
 
-    # Rutinas (lista como CBV, el resto como FBV)
+    # rutinas (listado y baja como cbv)
     path('rutinas/', views.RutinaListView.as_view(), name='lista_rutinas'),
     path('rutinas/crear/', views.crear_rutina, name='crear_rutina'),
     path('rutinas/<int:rutina_id>/editar/', views.editar_rutina, name='editar_rutina'),
-    path('rutinas/<int:rutina_id>/eliminar/', views.eliminar_rutina, name='eliminar_rutina'),
+    path('rutinas/<int:rutina_id>/eliminar/', views.RutinaDeleteView.as_view(), name='eliminar_rutina'),
 
     # Asistencias
     path('asistencias/', views.lista_asistencias, name='lista_asistencias'),

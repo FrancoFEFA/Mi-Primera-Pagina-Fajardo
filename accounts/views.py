@@ -1,21 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView
 
 from .forms import ProfileForm, RegistroForm
 from .models import Profile
 
 
+# cbv para registrar nuevos usuarios
 class RegistroView(CreateView):
-    """CBV para registro de nuevos usuarios."""
-
     form_class = RegistroForm
     template_name = 'accounts/registro.html'
     success_url = '/'
@@ -31,9 +28,8 @@ class RegistroView(CreateView):
         return super().form_invalid(form)
 
 
+# cbv para iniciar sesion con mensajes toast
 class CustomLoginView(LoginView):
-    """Login con mensajes toast."""
-
     template_name = 'accounts/login.html'
     redirect_authenticated_user = True
 
@@ -46,18 +42,16 @@ class CustomLoginView(LoginView):
         return super().form_invalid(form)
 
 
+# fbv con decorador login_required para cerrar sesion
 @login_required
 def logout_view(request):
-    """FBV con decorador login_required para cerrar sesión."""
     logout(request)
     messages.info(request, 'Cerraste sesión correctamente.')
     return redirect('inicio')
 
 
-@method_decorator(login_required, name='dispatch')
-class ProfileUpdateView(UpdateView):
-    """CBV con mixin LoginRequired (vía method_decorator) y LoginRequiredMixin implícito."""
-
+# cbv con mixin loginrequired para editar el perfil propio
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
     template_name = 'accounts/editar_perfil.html'
@@ -72,15 +66,15 @@ class ProfileUpdateView(UpdateView):
         return super().form_valid(form)
 
 
+# fbv con decorador login_required para ver el perfil propio
 @login_required
 def perfil_view(request):
-    """FBV con decorador login_required para mostrar el perfil del usuario."""
     profile, _ = Profile.objects.get_or_create(user=request.user)
     return render(request, 'accounts/perfil.html', {'profile': profile})
 
 
+# fbv publica para ver el perfil de cualquier usuario
 def perfil_publico(request, username):
-    """FBV que muestra el perfil público de cualquier usuario."""
     user = get_object_or_404(User, username=username)
     profile, _ = Profile.objects.get_or_create(user=user)
     return render(request, 'accounts/perfil_publico.html', {'profile': profile, 'perfil_user': user})
