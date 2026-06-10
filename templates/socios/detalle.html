@@ -8,15 +8,14 @@
         <div class="card-custom">
             <div class="card-body p-4 text-center">
                 {% if socio.avatar %}
-                    <img src="{{ socio.avatar.url }}" alt="Avatar"
-                         style="width: 130px; height: 130px; object-fit: cover; border-radius: 50%; border: 3px solid var(--pf-primary);">
+                    <img src="{{ socio.avatar.url }}" alt="Avatar" class="avatar-img" style="width: 130px; height: 130px;">
                 {% else %}
-                    <div class="mx-auto mb-3" style="width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, var(--pf-primary), var(--pf-accent)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #fff; font-weight: 800;">
+                    <div class="avatar-initial mx-auto mb-3" style="width: 130px; height: 130px; font-size: 3rem;">
                         {{ socio.nombre|first|upper }}
                     </div>
                 {% endif %}
-                <h3 class="mt-3" style="font-weight: 800;">{{ socio.nombre }} {{ socio.apellido }}</h3>
-                <p style="color: var(--pf-text-muted);">
+                <h3 class="mt-3 fw-800">{{ socio.nombre }} {{ socio.apellido }}</h3>
+                <p class="text-muted-pf">
                     <i class="bi bi-envelope"></i> {{ socio.email }}
                 </p>
                 <span class="badge-membresia badge-{{ socio.tipo_membresia }}">
@@ -25,9 +24,9 @@
                     {% else %}<i class="bi bi-circle me-1"></i>{% endif %}
                     {{ socio.get_tipo_membresia_display }}
                 </span>
-                <hr style="border-color: var(--pf-border);">
+                <hr class="my-3">
                 <div class="d-grid gap-2">
-                    <a href="{% url 'checkin_rapido' socio.id %}" class="btn btn-sm" style="background: var(--pf-success); color: #fff;">
+                    <a href="{% url 'checkin_rapido' socio.id %}" class="btn btn-sm btn-accent">
                         <i class="bi bi-check-circle"></i> Check-in rápido
                     </a>
                     <a href="{% url 'editar_socio' socio.id %}" class="btn btn-sm btn-outline-custom">
@@ -47,7 +46,7 @@
     <div class="col-lg-8 animate-in">
         <div class="row g-3 mb-3">
             <div class="col-sm-6">
-                <div class="stat-card purple">
+                <div class="stat-card">
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="stat-icon purple"><i class="bi bi-clipboard-check"></i></div>
                         <span class="stat-label">Rutinas</span>
@@ -56,7 +55,7 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="stat-card green">
+                <div class="stat-card">
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="stat-icon green"><i class="bi bi-calendar-check"></i></div>
                         <span class="stat-label">Asistencias (últ. 10)</span>
@@ -68,20 +67,20 @@
 
         <div class="card-custom mb-3">
             <div class="card-body p-4">
-                <h5 style="font-weight: 700;">
-                    <i class="bi bi-clipboard-check-fill me-2" style="color: var(--pf-primary-light);"></i>
+                <h5 class="fw-700">
+                    <i class="bi bi-clipboard-check-fill me-2 text-primary-pf"></i>
                     Rutinas asignadas
                 </h5>
                 {% if rutinas %}
                     <div class="d-flex flex-column gap-2 mt-3">
                         {% for rutina in rutinas %}
-                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                        <div class="info-block">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                                 <div>
                                     <strong>{{ rutina.nombre }}</strong>
-                                    <span style="color: var(--pf-text-muted);"> &middot; {{ rutina.duracion_semanas }} sem.</span>
+                                    <span class="text-muted-pf"> &middot; {{ rutina.duracion_semanas }} sem.</span>
                                 </div>
-                                <small style="color: var(--pf-text-muted);">
+                                <small class="text-muted-pf">
                                     <i class="bi bi-person-badge"></i> {{ rutina.entrenador.nombre }} {{ rutina.entrenador.apellido }}
                                 </small>
                             </div>
@@ -99,17 +98,16 @@
 
         <div class="card-custom">
             <div class="card-body p-4">
-                <h5 style="font-weight: 700;">
-                    <i class="bi bi-calendar-check-fill me-2" style="color: var(--pf-accent);"></i>
+                <h5 class="fw-700">
+                    <i class="bi bi-calendar-check-fill me-2 text-accent-pf"></i>
                     Últimas asistencias
                 </h5>
                 {% if asistencias %}
                     <div class="d-flex flex-column gap-2 mt-3">
                         {% for asistencia in asistencias %}
-                        <div class="p-3 rounded-3 d-flex justify-content-between align-items-center"
-                             style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
-                            <span style="font-weight: 600;">{{ asistencia.get_tipo_actividad_display }}</span>
-                            <small style="color: var(--pf-text-muted);">{{ asistencia.fecha|date:"d/m/Y H:i" }}</small>
+                        <div class="info-block d-flex justify-content-between align-items-center">
+                            <span class="fw-600">{{ asistencia.get_tipo_actividad_display }}</span>
+                            <small class="text-muted-pf">{{ asistencia.fecha|date:"d/m/Y H:i" }}</small>
                         </div>
                         {% endfor %}
                     </div>
@@ -122,7 +120,7 @@
             </div>
         </div>
 
-        <div class="mt-3" style="color: var(--pf-text-muted);">
+        <div class="mt-3 text-muted-pf">
             <small><i class="bi bi-calendar-event"></i> Socio desde el {{ socio.fecha_inscripcion|date:"d/m/Y" }}</small>
         </div>
     </div>

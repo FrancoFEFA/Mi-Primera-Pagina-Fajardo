@@ -5,19 +5,19 @@
 {% block contenido %}
 
 <div class="page-header">
-    <h1><i class="bi bi-exclamation-triangle-fill me-2" style="color: var(--pf-danger);"></i>Eliminar Entrenador</h1>
+    <h1><i class="bi bi-exclamation-triangle-fill me-2 text-danger-pf"></i>Eliminar Entrenador</h1>
     <p>Esta acción no se puede deshacer</p>
 </div>
 
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <div class="card-custom animate-in" style="border-left: 4px solid var(--pf-danger);">
+        <div class="card-custom animate-in danger-card">
             <div class="card-body text-center p-4">
-                <div style="font-size: 4rem; color: var(--pf-danger); margin-bottom: 1rem;">
+                <div class="danger-icon">
                     <i class="bi bi-x-circle"></i>
                 </div>
-                <h4 style="font-weight: 700;">¿Eliminar a <span style="color: var(--pf-danger);">{{ entrenador.nombre }} {{ entrenador.apellido }}</span>?</h4>
-                <p style="color: var(--pf-text-muted);">
+                <h4 class="fw-700">¿Eliminar a <span class="text-danger-pf">{{ entrenador.nombre }} {{ entrenador.apellido }}</span>?</h4>
+                <p class="text-muted-pf">
                     Se eliminarán también todas las <strong>rutinas</strong> asociadas a este entrenador.
                 </p>
 
@@ -27,7 +27,7 @@
                         <a href="{% url 'lista_entrenadores' %}" class="btn btn-outline-custom">
                             <i class="bi bi-arrow-left me-1"></i> Cancelar
                         </a>
-                        <button type="submit" class="btn btn-danger" style="background: var(--pf-danger); border-color: var(--pf-danger);">
+                        <button type="submit" class="btn btn-danger-custom">
                             <i class="bi bi-trash me-1"></i> Eliminar Entrenador
                         </button>
                     </div>

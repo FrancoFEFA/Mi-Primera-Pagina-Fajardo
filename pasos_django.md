@@ -1,76 +1,179 @@
-# Guia para un proyecto django
+# Guía para iniciar un proyecto Django
 
-1. creamos una carpeta donde vamos a meter el proyecto
-2. entramos en la carpeta y la abrimos con vscode
-3. creamos el archivo .gitignore le guardamos lo generado por la pagina [gitignore.io](https://gitignore.io) seleccionando lo que van a utilizar (en nuestro caso `visualstudiocode`, `python` y `django`)
-4. creamos el entorno virtual `python -m venv <nombre_de_la_carpeta_que_contiene_el_entorno_virtual>` (`*`)
-5. agregar el nombre del entonrno virtual al .gitignore (`*`)
-6. inicializamos git
-7. creamos el primer commit
-8. conectamos nuestro repositorio con el repositorio en la nube (github u otro)
-9. hacemos el primer push
-10. activamos el entorno virtual (`*`)(`*****`)
+## 1. Preparación del entorno
 
+### Crear la estructura del proyecto
+1. Crea una carpeta para tu proyecto
+2. Abre la carpeta en VSCode
+3. Crea un archivo `.gitignore` con las configuraciones para `visualstudiocode`, `python` y `django` (puedes generarlo en [gitignore.io](https://gitignore.io))
+
+### Configurar el entorno virtual
+4. Crea el entorno virtual:
+   ```shell
+   python -m venv .venv
+   ```
+5. Agrega `.venv/` al archivo `.gitignore`
+
+### Inicializar el repositorio Git
+6. Inicializa Git:
+   ```shell
+   git init
+   ```
+7. Realiza el primer commit:
+   ```shell
+   git add .
+   git commit -m "Initial commit"
+   ```
+8. Conecta con GitHub (u otro repositorio remoto)
+9. Haz el primer push
+
+## 2. Instalación y configuración de Django
+
+### Activar el entorno virtual
+10. Activa el entorno virtual según tu sistema operativo:
+
+    **Windows (PowerShell):**
     ```shell
-    # Windows
-    source .venv/Scripts/activate
-    . .venv/Scripts/activate
-# powersell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Set-ExecutionPolicity Unrestricted 
- "ejecute este comando ya que me daba un error de UnauthorizedAccess"
-
-Luego ejecute el comando:
- .\.venv\Scripts\Activate.ps1 (.\.venv\Scripts\activate)
- Para desactivar:
- deactivate
-
-    # Linux/Mac (GitBash)
-    source .venv/Scripts/activate
-    . .venv/bin/activate
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+    .\.venv\Scripts\Activate.ps1
     ```
-    
-11. instalar django con el manejador de paquetes de python `pip` con el comando `pip install Django`
-12. crear el requirements.txt con los datos de las dependencias usando el comando `pip freeze > requirements.txt` (`**`)
-13. crear el proyecto django donde estamos trabajando con el comando `django-admin startproject mi_proyecto .` (`***`)
-14. probamos el proyecto ejecutando primero `python manage.py migrate` y luego `python manage.py runserver`
-15. creamos nuestra app principal con el comando `python manage.py startapp <nombre_de_la_app>`
-    - agregamos la app a el archivo settings.py
-    - creamos el archivo urls.py dentro de nuestra app
-    - agregamos el path que conecta al urls.py de la carpeta donde esta el settings.py al de nuestra app con el codigo `path('<url_que_quieran_poner>', include('<nombre_de_la_app>.urls'))`
-16. agregamos el valor `BASE_DIR / 'templates'` a la lista en la key `DIRS` de la variable `TEMPLATES` en el archivo settings.py
-Agregué BASE_DIR / 'templates' a DIRS en settings.py
-17. creamos la carpeta templates a la altura de las apps (Creé la carpeta templates en la raíz del proyecto)
-18. crear un super usuario que nos permita acceder al apartado de admin de nuestra pagina ejecutando `python manage.py createsuperuser`
-    - tener en cuenta que cuando se solicita la password cuando escriben no se muestra en la terminal pero se esta escribiendo igual (esto es para que no se vea la password que estan configurando a modo de seguridad)
-    - Acceder al panel de administración de Django (http://127.0.0.1:8000/admin)
-19. crear vistas
-    - crear el path que conectara con su vista en el archivo `urls.py` de la app que corresponda
-    - crear la vista en el archivo `views.py` de la app que corresponda
-    - crear el template que utilizaran para la vista dentro de la carpeta templates
-    - agregar el link (etiqueta `a`) al path que corresponde a la vista
-20. crear modelos
-    1. crear modelo dentro de el archivo `models.py`
-        - heredan de `models.Model`
-        - los atributos los completan con los Fields que les brinda `models` ejemplo `models.CharField(max_length=20)`
-    2. generar una migracion con el comando `python manage.py makemigrations`
-    3. plasmar la migracion en la bd con el comando `python manage.py migrate`
-    4. En caso de modificacion de un modelo existente, creacion de otro modelo o borrado de un modelo volver a ejecutar los pasos 2 y 3
-        - tener en cuenta que para modificar el nombre y los atributos de un mismo modelo se deben hacer los pasos 2 y 3 una vez por la modificacion de los atributos y otro por el cambio en el nombre del modelo para no generar conflictos con django
-    5. registrar el modelo en el apartado de admin importando en el archivo `admin.py` el modelo y agregando el codigo `admin.site.register(<modelo_importado>)` dentro del mismo archivo admin.py
-        - en caso de ser varios modelos se puede agregar esta ultima linea para cada modelo o hacer una sola linea y pasarle todos los modelos dentro de una lista
-    6. importar el modelo creado en el views.py que corresponda para utilizarlo en las vistas
-21. crear formularios
-    1. crear el archivo `forms.py` dentro de la app que corresponda en caso que no este creado
-    2. crear el formulario
-        - heredan de `forms.Form`
-        - los atributos los completan con los Fields que les brinda `forms` ejemplo `forms.CharField(max_length=20)` (`****`)
-    3. importar el formulario creado en el views.py que corresponda para utilizarlo en las vistas
 
-(`*`) En caso de no utilizar entorno virtual omitir este paso  
-(`**`) Este paso se debe repetir tras cada instalacion de paquetes para mantener la informacion actualizada  
-(`***`) No olvidar el punto al final para que les genere el proyecto donde estan parados y no se creen carpetas de mas  
-(`****`) Como veran es muy similar a lo que se hace en los modelos (no es exactamente igual para todo)  
-(`*****`) Para desactivar el entorno virtual ejecutar el comando `deactivate`
+    **Windows (CMD):**
+    ```shell
+    .venv\Scripts\activate
+    ```
 
-#El problema es que las URLs no matchean con la búsqueda por substring. Mejor crear un context processor que indique qué sección está activa. Es la forma correcta y escalable.
+    **Linux/Mac:**
+    ```shell
+    source .venv/bin/activate
+    ```
+
+    Para desactivar: `deactivate`
+
+### Instalar Django
+11. Instala Django usando pip:
+    ```shell
+    pip install Django
+    ```
+
+12. Crea el archivo `requirements.txt`:
+    ```shell
+    pip freeze > requirements.txt
+    ```
+    > **Nota:** Repite este comando cada vez que instales nuevos paquetes.
+
+### Crear el proyecto Django
+13. Crea el proyecto Django en el directorio actual:
+    ```shell
+    django-admin startproject mi_proyecto .
+    ```
+    > **Importante:** El punto `.` al final evita que se cree una carpeta adicional.
+
+14. Verifica que funciona:
+    ```shell
+    python manage.py migrate
+    python manage.py runserver
+    ```
+
+## 3. Configuración de la aplicación principal
+
+### Crear la app
+15. Crea tu app principal:
+    ```shell
+    python manage.py startapp nombre_app
+    ```
+
+16. Registra la app en `settings.py`:
+    - Abre `settings.py`
+    - Agrega `nombre_app` a la lista `INSTALLED_APPS`
+
+17. Configura las URLs de la app:
+    - Crea un archivo `urls.py` dentro de tu app
+    - En el `urls.py` principal, agrega:
+      ```python
+      from django.urls import include, path
+
+      urlpatterns = [
+          path('ruta/', include('nombre_app.urls')),
+      ]
+      ```
+
+### Configurar templates
+18. Configura la carpeta de templates en `settings.py`:
+    ```python
+    TEMPLATES = [
+        {
+            'DIRS': [BASE_DIR / 'templates'],
+        },
+    ]
+    ```
+
+19. Crea la carpeta `templates` en la raíz del proyecto (al mismo nivel que `manage.py`)
+
+## 4. Configuración del administrador
+
+20. Crea un superusuario:
+    ```shell
+    python manage.py createsuperuser
+    ```
+    > **Nota:** La contraseña no se muestra mientras escribes, pero se está ingresando correctamente.
+
+21. Accede al panel de administración en: `http://127.0.0.1:8000/admin`
+
+## 5. Crear vistas
+
+22. Para cada vista:
+    - Define el path en `urls.py` de tu app
+    - Crea la función vista en `views.py` de tu app
+    - Crea el template HTML en la carpeta `templates`
+    - Agrega enlaces (`<a>`) hacia las rutas correspondientes
+
+## 6. Crear modelos
+
+23. Define el modelo en `models.py`:
+    ```python
+    from django.db import models
+
+    class MiModelo(models.Model):
+        nombre = models.CharField(max_length=100)
+        # más campos...
+    ```
+
+24. Genera y aplica las migraciones:
+    ```shell
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+25. Registra el modelo en `admin.py`:
+    ```python
+    from django.contrib import admin
+    from .models import MiModelo
+
+    admin.site.register(MiModelo)
+    ```
+
+26. Importa el modelo en `views.py` para usarlo en tus vistas
+
+## 7. Crear formularios
+
+27. Crea el archivo `forms.py` en tu app
+
+28. Define el formulario:
+    ```python
+    from django import forms
+
+    class MiFormulario(forms.Form):
+        campo = forms.CharField(max_length=100)
+    ```
+
+29. Importa y usa el formulario en `views.py`
+
+---
+
+## Notas importantes
+
+- **Entorno virtual:** Si no usas entorno virtual, omite los pasos relacionados
+- **requirements.txt:** Actualízalo después de cada instalación de paquetes
+- **Migraciones:** Ejecuta `makemigrations` y `migrate` cada vez que modifiques modelos
+- **URLs y vistas:** Asegúrate de que las URLs coincidan correctamente con tus vistas

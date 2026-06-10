@@ -6,7 +6,7 @@
 
 <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
     <div>
-        <h1><i class="bi bi-clipboard-check-fill me-2" style="color: var(--pf-warning);"></i>Rutinas</h1>
+        <h1><i class="bi bi-clipboard-check-fill me-2 text-warning-pf"></i>Rutinas</h1>
         <p>Rutinas de entrenamiento disponibles en PowerFit</p>
     </div>
     <a href="{% url 'crear_rutina' %}" class="btn btn-primary-custom">
@@ -27,7 +27,7 @@
                         <i class="bi bi-search search-icon"></i>
                         {{ form_busqueda.consulta }}
                     </div>
-                    <small class="text-muted mt-1 d-block" style="color: var(--pf-text-muted) !important;">
+                    <small class="text-muted-pf mt-1 d-block">
                         Buscá por nombre de rutina o especialidad del entrenador
                     </small>
                 </div>
@@ -47,8 +47,8 @@
 </div>
 
 {% if consulta %}
-<div class="alert mb-4" style="background: rgba(108, 60, 224, 0.1); border: 1px solid var(--pf-primary); border-radius: 12px; color: var(--pf-text);">
-    <i class="bi bi-info-circle me-2" style="color: var(--pf-primary-light);"></i>
+<div class="alert-search">
+    <i class="bi bi-info-circle me-2 text-primary-pf"></i>
     Se encontraron <strong>{{ rutinas|length }}</strong> resultado{{ rutinas|length|pluralize:"," }} para "<strong>{{ consulta }}</strong>"
 </div>
 {% endif %}
@@ -59,34 +59,34 @@
     {% for rutina in rutinas %}
     <div class="col-md-6 animate-in">
         <div class="card-custom h-100">
-            <div class="card-body" style="position: relative;">
+            <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h5 style="font-weight: 700; margin-bottom: 0;">{{ rutina.nombre }}</h5>
+                    <h5 class="fw-700 mb-0">{{ rutina.nombre }}</h5>
                     <span class="badge-membresia badge-premium">
                         <i class="bi bi-calendar3 me-1"></i>{{ rutina.duracion_semanas }} sem.
                     </span>
                 </div>
 
-                <p style="color: var(--pf-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                <p class="text-muted-pf mb-3" style="font-size: 0.9rem;">
                     {{ rutina.descripcion|truncatewords:25 }}
                 </p>
 
-                <div class="d-flex align-items-center gap-2 mb-3 p-2 rounded-3" style="background: rgba(20, 184, 166, 0.06); border: 1px solid var(--pf-border);">
+                <div class="d-flex align-items-center gap-2 mb-3 p-2 info-block">
                     <div class="stat-icon teal" style="width: 36px; height: 36px; font-size: 1rem;">
                         <i class="bi bi-person-fill"></i>
                     </div>
                     <div>
-                        <small style="color: var(--pf-text-muted); display: block;">Entrenador</small>
-                        <span style="font-weight: 600; font-size: 0.9rem;">
+                        <small class="text-muted-pf d-block">Entrenador</small>
+                        <span class="fw-600" style="font-size: 0.9rem;">
                             {{ rutina.entrenador.nombre }} {{ rutina.entrenador.apellido }}
                         </span>
-                        <small style="color: var(--pf-accent); display: block;">{{ rutina.entrenador.especialidad }}</small>
+                        <small class="text-accent-pf d-block">{{ rutina.entrenador.especialidad }}</small>
                     </div>
                 </div>
 
                 {% if rutina.socios.all %}
                 <div>
-                    <small style="color: var(--pf-text-muted); font-weight: 600;">
+                    <small class="text-muted-pf fw-600">
                         <i class="bi bi-people me-1"></i> Socios asignados ({{ rutina.socios.count }}):
                     </small>
                     <div class="mt-1 d-flex flex-wrap gap-1">
@@ -98,16 +98,16 @@
                     </div>
                 </div>
                 {% else %}
-                <small style="color: var(--pf-text-muted);">
+                <small class="text-muted-pf">
                     <i class="bi bi-people me-1"></i> Sin socios asignados
                 </small>
                 {% endif %}
 
-                <div class="mt-3 d-flex gap-2 justify-content-end" style="border-top: 1px solid var(--pf-border); padding-top: 0.75rem;">
-                    <a href="{% url 'editar_rutina' rutina.id %}" class="btn btn-sm btn-outline-custom" title="Editar rutina">
+                <div class="mt-3 d-flex gap-2 justify-content-end pt-3" style="border-top: 1px solid var(--pf-border);">
+                    <a href="{% url 'editar_rutina' rutina.id %}" class="btn btn-sm btn-icon" title="Editar rutina">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <a href="{% url 'eliminar_rutina' rutina.id %}" class="btn btn-sm btn-outline-custom" title="Eliminar rutina">
+                    <a href="{% url 'eliminar_rutina' rutina.id %}" class="btn btn-sm btn-icon danger" title="Eliminar rutina">
                         <i class="bi bi-x-circle"></i>
                     </a>
                 </div>

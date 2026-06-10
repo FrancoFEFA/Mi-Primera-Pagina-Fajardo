@@ -5,7 +5,7 @@
 {% block contenido %}
 
 <div class="page-header">
-    <h1><i class="bi {% if form.instance.pk %}bi-pencil-fill{% else %}bi-person-plus-fill{% endif %} me-2" style="color: var(--pf-primary-light);"></i>{% if form.instance.pk %}Editar Socio{% else %}Alta de Socio{% endif %}</h1>
+    <h1><i class="bi {% if form.instance.pk %}bi-pencil-fill{% else %}bi-person-plus-fill{% endif %} me-2 text-primary-pf"></i>{% if form.instance.pk %}Editar Socio{% else %}Alta de Socio{% endif %}</h1>
     <p>{% if form.instance.pk %}Actualizá los datos del socio en el gimnasio{% else %}Completá el formulario para registrar un nuevo socio en el gimnasio{% endif %}</p>
 </div>
 

@@ -7,12 +7,12 @@
     <div class="col-lg-8 animate-in">
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="d-flex align-items-center gap-3">
-                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--pf-accent), var(--pf-accent-light)); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 1.3rem;">
+                <div class="chat-avatar">
                     {{ otro.username|first|upper }}
                 </div>
                 <div>
-                    <h1 class="mb-0" style="font-weight: 800;">{{ otro.username }}</h1>
-                    <p class="mb-0" style="color: var(--pf-text-muted);">
+                    <h1 class="mb-0 fw-800">{{ otro.username }}</h1>
+                    <p class="mb-0 text-muted-pf">
                         {% if otro.first_name %}{{ otro.first_name }} {{ otro.last_name }}{% else %}Conversación{% endif %}
                     </p>
                 </div>
@@ -29,16 +29,16 @@
                         {% for m in mensajes %}
                             {% if m.emisor == request.user %}
                                 <div class="d-flex justify-content-end">
-                                    <div class="p-3 rounded-3" style="max-width: 75%; background: linear-gradient(135deg, var(--pf-primary), var(--pf-primary-light)); color: #fff;">
+                                    <div class="chat-bubble-sent">
                                         <p class="mb-1" style="white-space: pre-line;">{{ m.contenido }}</p>
-                                        <small style="opacity: 0.8;">{{ m.fecha_envio|date:"d/m/Y H:i" }}</small>
+                                        <small>{{ m.fecha_envio|date:"d/m/Y H:i" }}</small>
                                     </div>
                                 </div>
                             {% else %}
                                 <div class="d-flex justify-content-start">
-                                    <div class="p-3 rounded-3" style="max-width: 75%; background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                                    <div class="chat-bubble-received">
                                         <p class="mb-1" style="white-space: pre-line;">{{ m.contenido }}</p>
-                                        <small style="color: var(--pf-text-muted);">{{ m.fecha_envio|date:"d/m/Y H:i" }}</small>
+                                        <small>{{ m.fecha_envio|date:"d/m/Y H:i" }}</small>
                                     </div>
                                 </div>
                             {% endif %}

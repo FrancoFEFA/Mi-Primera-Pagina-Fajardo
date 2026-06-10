@@ -9,18 +9,17 @@
             <div class="card-body p-4 p-md-5">
                 <div class="d-flex align-items-center gap-4 flex-wrap mb-4">
                     {% if profile.avatar %}
-                        <img src="{{ profile.avatar.url }}" alt="Avatar"
-                             style="width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid var(--pf-primary);">
+                        <img src="{{ profile.avatar.url }}" alt="Avatar" class="avatar-img" style="width: 110px; height: 110px;">
                     {% else %}
-                        <div style="width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--pf-primary), var(--pf-accent)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #fff; font-weight: 800;">
+                        <div class="avatar-initial" style="width: 110px; height: 110px; font-size: 2.5rem;">
                             {{ request.user.username|first|upper }}
                         </div>
                     {% endif %}
                     <div class="flex-grow-1">
-                        <h2 style="font-weight: 800; margin-bottom: 0.25rem;">
+                        <h2 class="fw-800 mb-1">
                             {{ request.user.first_name }} {{ request.user.last_name }}
                         </h2>
-                        <p style="color: var(--pf-text-muted); margin-bottom: 0.5rem;">
+                        <p class="text-muted-pf mb-2">
                             <i class="bi bi-at"></i> {{ request.user.username }}
                             &middot;
                             <i class="bi bi-envelope"></i> {{ request.user.email }}
@@ -36,51 +35,51 @@
                     </a>
                 </div>
 
-                <hr style="border-color: var(--pf-border);">
+                <hr>
 
-                <h5 style="font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-person-lines-fill me-2" style="color: var(--pf-primary-light);"></i>
+                <h5 class="fw-700 mb-3">
+                    <i class="bi bi-person-lines-fill me-2 text-primary-pf"></i>
                     Información personal
                 </h5>
 
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
-                            <small style="color: var(--pf-text-muted);">Nombre</small>
-                            <div style="font-weight: 600;">{{ request.user.first_name|default:"—" }}</div>
+                        <div class="info-block">
+                            <small class="text-muted-pf">Nombre</small>
+                            <div class="fw-600">{{ request.user.first_name|default:"—" }}</div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
-                            <small style="color: var(--pf-text-muted);">Apellido</small>
-                            <div style="font-weight: 600;">{{ request.user.last_name|default:"—" }}</div>
+                        <div class="info-block">
+                            <small class="text-muted-pf">Apellido</small>
+                            <div class="fw-600">{{ request.user.last_name|default:"—" }}</div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
-                            <small style="color: var(--pf-text-muted);">Email</small>
-                            <div style="font-weight: 600;">{{ request.user.email|default:"—" }}</div>
+                        <div class="info-block">
+                            <small class="text-muted-pf">Email</small>
+                            <div class="fw-600">{{ request.user.email|default:"—" }}</div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
-                            <small style="color: var(--pf-text-muted);">Fecha de nacimiento</small>
-                            <div style="font-weight: 600;">
+                        <div class="info-block">
+                            <small class="text-muted-pf">Fecha de nacimiento</small>
+                            <div class="fw-600">
                                 {% if profile.fecha_nacimiento %}{{ profile.fecha_nacimiento|date:"d/m/Y" }}{% else %}—{% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h5 class="mt-4" style="font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-chat-quote me-2" style="color: var(--pf-accent);"></i>
+                <h5 class="mt-4 fw-700 mb-3">
+                    <i class="bi bi-chat-quote me-2 text-accent-pf"></i>
                     Biografía
                 </h5>
-                <div class="p-3 rounded-3" style="background: var(--pf-bg-dark); border: 1px solid var(--pf-border);">
+                <div class="info-block">
                     {% if profile.bio %}
                         <p class="mb-0" style="white-space: pre-line;">{{ profile.bio }}</p>
                     {% else %}
-                        <p class="mb-0" style="color: var(--pf-text-muted); font-style: italic;">
+                        <p class="mb-0 text-muted-pf" style="font-style: italic;">
                             Todavía no escribiste tu biografía. ¡Contanos sobre vos!
                         </p>
                     {% endif %}

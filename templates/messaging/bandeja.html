@@ -5,7 +5,7 @@
 {% block contenido %}
 <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
     <div>
-        <h1><i class="bi bi-inbox-fill me-2" style="color: var(--pf-primary-light);"></i>Bandeja de entrada</h1>
+        <h1><i class="bi bi-inbox-fill me-2 text-primary-pf"></i>Bandeja de entrada</h1>
         <p>
             Mensajes recibidos
             {% if no_leidos %}<span class="badge-membresia badge-vip ms-1">{{ no_leidos }} sin leer</span>{% endif %}
@@ -40,16 +40,16 @@
                 </thead>
                 <tbody>
                     {% for m in mensajes %}
-                    <tr class="animate-in" style="{% if not m.leido %}background: rgba(108, 60, 224, 0.06);{% endif %}">
-                        <td style="font-weight: 600;">
-                            <a href="{% url 'accounts:perfil_publico' m.emisor.username %}" style="color: var(--pf-primary-light); text-decoration: none;">
+                    <tr class="animate-in {% if not m.leido %}msg-unread{% endif %}">
+                        <td class="fw-600">
+                            <a href="{% url 'accounts:perfil_publico' m.emisor.username %}" class="text-primary-pf text-decoration-none">
                                 {{ m.emisor.username }}
                             </a>
                         </td>
                         <td style="max-width: 350px;">
-                            <span style="color: var(--pf-text-muted);">{{ m.contenido|truncatechars:60 }}</span>
+                            <span class="text-muted-pf">{{ m.contenido|truncatechars:60 }}</span>
                         </td>
-                        <td style="color: var(--pf-text-muted); white-space: nowrap;">{{ m.fecha_envio|date:"d/m/Y H:i" }}</td>
+                        <td class="text-muted-pf" style="white-space: nowrap;">{{ m.fecha_envio|date:"d/m/Y H:i" }}</td>
                         <td>
                             {% if m.leido %}
                                 <span class="badge-membresia badge-basica"><i class="bi bi-check2"></i> Leído</span>
